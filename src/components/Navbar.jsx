@@ -47,6 +47,15 @@ const Navbar = () => {
     setShowAuthModal(true);
   };
 
+  // Handle navigation - redirect to login if not authenticated
+  const handleNavigation = (to) => {
+    if (!isAuthenticated && (to === '/dashboard' || to === '/templates' || to === '/ar-view')) {
+      openAuthModal('signin');
+      return false;
+    }
+    return true;
+  };
+
   return (
     <>
       <motion.nav 
@@ -69,12 +78,13 @@ const Navbar = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               {navLinks.map((link) => (
-                <NavLink 
+                <NavLink
                   key={link.to}
-                  to={link.to} 
-                  label={link.label} 
+                  to={link.to}
+                  label={link.label}
                   icon={link.icon}
-                  isActive={isActive(link.to)} 
+                  isActive={isActive(link.to)}
+                  onClick={() => handleNavigation(link.to)}
                 />
               ))}
             </div>
@@ -243,7 +253,136 @@ const Navbar = () => {
                 </form>
 
                 {navLinks.map((link) => (
-                  <Link
+                  isAuthenticated || link.to === '/' ? (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center space-x-3 px-3 py-3 rounded-lg font-medium transition-all ${
+                        isActive(link.to)
+                          ? 'text-primary-700 bg-primary-50'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      <link.icon className="h-5 w-5" />
+                      <span>{link.label}</span>
+                    </Link>
+                  ) : (
+                    <button
+                      key={link.to}
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        openAuthModal('signin');
+                      }}
+                      className="w-full flex items-center space-x-3 px-3 py-3 rounded-lg font-medium transition-all text-gray-600 hover:text-gray-900 hover:bg-gray-50 text-left"
+                    >
+                      <link.icon className="h-5 w-5" />
+                      <span>{link.label}</span>
+                    </button>
+                  )
+                ))}
+                
+                <div className="pt-3 border-t border-gray-200 space-y-3">
+                  {isAuthenticated ? (
+                    <>
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center space-x-3 px-3 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg font-medium transition-colors"
+                      >
+                        <User className="h-5 w-5" />
+                        <span>Profile</span>
+                      </Link>
+                      <Link
+                        to="/settings"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center space-x-3 px-3 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg font-medium transition-colors"
+                      >
+                        <Settings className="h-5 w-5" />
+                        <span>Settings</span>
+                      </Link>
+                      <Link
+                        to="/create"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block w-full text-center px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-lg hover:from-primary-700 hover:to-primary-800 font-medium transition-all"
+                      >
+                        Start Designing
+                      </Link>
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="flex items-center space-x-3 px-3 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg font-medium transition-colors w-full"
+                      >
+                        <LogOut className="h-5 w-5" />
+                        <span>Sign Out</span>
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        openAuthModal('signin');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center space-x-3 px-3 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg font-medium transition-colors w-full"
+                    >
+                      <LogIn className="h-5 w-5" />
+                      <span>Sign In</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+      
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        mode={authMode}
+        onSwitchMode={() => setAuthMode(authMode === 'signin' ? 'signup' : 'signin')}
+        onAuthSuccess={handleAuthSuccess}
+      />
+    </>
+  );
+};
+
+const NavLink = ({ to, label, icon: Icon, isActive, onClick }) => {
+  if (onClick && !onClick()) {
+    return (
+      <button
+        onClick={onClick}
+        className={`flex items-center space-x-2 px-3 py-2 rounded-lg font-medium transition-all ${
+          isActive
+            ? 'text-primary-700 bg-primary-50'
+            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+        }`}
+      >
+        <Icon className="h-4 w-4" />
+        <span>{label}</span>
+      </button>
+    );
+  }
+
+  return (
+    <Link
+      to={to}
+      className={`flex items-center space-x-2 px-3 py-2 rounded-lg font-medium transition-all ${
+        isActive
+          ? 'text-primary-700 bg-primary-50'
+          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+      }`}
+    >
+      <Icon className="h-4 w-4" />
+      <span>{label}</span>
+    </Link>
+  );
+};
+
+export default Navbar;
                     key={link.to}
                     to={link.to}
                     onClick={() => setIsMobileMenuOpen(false)}

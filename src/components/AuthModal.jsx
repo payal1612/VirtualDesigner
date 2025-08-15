@@ -26,6 +26,13 @@ const AuthModal = ({ isOpen, onClose, mode, onSwitchMode, onAuthSuccess }) => {
       return;
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setErrors({ email: 'Please enter a valid email address' });
+      return;
+    }
+
     if (mode === 'signup') {
       if (!formData.fullName) {
         setErrors({ fullName: 'Full name is required' });
@@ -52,6 +59,7 @@ const AuthModal = ({ isOpen, onClose, mode, onSwitchMode, onAuthSuccess }) => {
       if (result.success) {
         onAuthSuccess();
         setFormData({ email: '', password: '', fullName: '', confirmPassword: '' });
+        setErrors({});
         
         // Show success notification
         const notification = document.createElement('div');
@@ -76,6 +84,17 @@ const AuthModal = ({ isOpen, onClose, mode, onSwitchMode, onAuthSuccess }) => {
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
+    if (errors.general) {
+      setErrors(prev => ({ ...prev, general: '' }));
+    }
+  };
+
+  const handleClose = () => {
+    setFormData({ email: '', password: '', fullName: '', confirmPassword: '' });
+    setErrors({});
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -87,7 +106,7 @@ const AuthModal = ({ isOpen, onClose, mode, onSwitchMode, onAuthSuccess }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-        onClick={onClose}
+        onClick={handleClose}
       >
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
@@ -97,7 +116,7 @@ const AuthModal = ({ isOpen, onClose, mode, onSwitchMode, onAuthSuccess }) => {
           onClick={(e) => e.stopPropagation()}
         >
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <X className="h-5 w-5" />
@@ -197,6 +216,9 @@ const AuthModal = ({ isOpen, onClose, mode, onSwitchMode, onAuthSuccess }) => {
               </div>
               {errors.password && (
                 <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+              )}
+              {mode === 'signup' && (
+                <p className="mt-1 text-xs text-gray-500">Password must be at least 6 characters long</p>
               )}
             </div>
 
