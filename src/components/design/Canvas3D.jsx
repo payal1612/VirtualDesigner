@@ -1,0 +1,536 @@
+import React, { Suspense, useRef, useState, useEffect } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { 
+  OrbitControls, 
+  Environment, 
+  Grid, 
+  useGLTF, 
+  Text3D, 
+  Center,
+  Bounds,
+  ContactShadows,
+  Sky,
+  Stars,
+  PerspectiveCamera,
+  Html,
+  useProgress
+} from '@react-three/drei';
+import { motion } from 'framer-motion';
+import { 
+  RotateCcw, 
+  Home, 
+  Sun, 
+  Moon, 
+  Settings, 
+  Camera,
+  Download,
+  Maximize2,
+  Eye,
+  Layers,
+  Palette
+} from 'lucide-react';
+import * as THREE from 'three';
+
+const Canvas3D = ({ 
+  design, 
+  selectedElement, 
+  onElementSelect, 
+  onElementUpdate,
+  viewMode,
+  onToggleView 
+}) => {
+  const [cameraPosition, setCameraPosition] = useState([10, 10, 10]);
+  const [lightingMode, setLightingMode] = useState('day');
+  const [showGrid, setShowGrid] = useState(true);
+  const [showShadows, setShowShadows] = useState(true);
+  const [environmentPreset, setEnvironmentPreset] = useState('city');
+  const [renderQuality, setRenderQuality] = useState('medium');
+  const controlsRef = useRef();
+
+  // Reset camera view
+  const resetCamera = () => {
+    if (controlsRef.current) {
+      controlsRef.current.reset();
+    }
+  };
+
+  // Convert 2D elements to 3D positions
+  const convertTo3D = (element) => {
+    return {
+      ...element,
+      x: (element.x - 400) / 50, // Scale and center
+      y: 0, // Ground level
+      z: -(element.y - 300) / 50, // Flip Z for proper orientation
+      width: element.width / 50,
+      height: element.height / 50,
+      depth: element.type === 'wall' ? 0.2 : 1
+    };
+  };
+
+  return (
+    <div className="relative w-full h-full bg-gradient-to-b from-blue-50 to-blue-100">
+      {/* 3D Canvas */}
+      <Canvas
+        shadows={showShadows}
+        camera={{ position: cameraPosition, fov: 60 }}
+        gl={{ 
+          antialias: renderQuality !== 'low',
+          powerPreference: "high-performance"
+        }}
+      >
+        <Suspense fallback={<LoadingFallback />}>
+          {/* Camera Controls */}
+          <OrbitControls
+            ref={controlsRef}
+            enablePan={true}
+            enableZoom={true}
+            enableRotate={true}
+            minDistance={5}
+            maxDistance={50}
+            maxPolarAngle={Math.PI / 2}
+          />
+
+          {/* Lighting Setup */}
+          <LightingSetup mode={lightingMode} />
+
+          {/* Environment */}
+          <Environment preset={environmentPreset} />
+          
+          {/* Sky */}
+          {lightingMode === 'day' && <Sky sunPosition={[100, 20, 100]} />}
+          {lightingMode === 'night' && <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />}
+
+          {/* Grid */}
+          {showGrid && (
+            <Grid
+              args={[20, 20]}
+              cellSize={1}
+              cellThickness={0.5}
+              cellColor="#6b7280"
+              sectionSize={5}
+              sectionThickness={1}
+              sectionColor="#374151"
+              fadeDistance={25}
+              fadeStrength={1}
+              followCamera={false}
+              infiniteGrid={true}
+            />
+          )}
+
+          {/* Ground Plane */}
+          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
+            <planeGeometry args={[50, 50]} />
+            <meshStandardMaterial color="#f3f4f6" />
+          </mesh>
+
+          {/* Contact Shadows */}
+          {showShadows && (
+            <ContactShadows
+              position={[0, 0, 0]}
+              opacity={0.4}
+              scale={20}
+              blur={1}
+              far={10}
+              resolution={256}
+              color="#000000"
+            />
+          )}
+
+          {/* 3D Elements */}
+          <Bounds fit clip observe margin={1.2}>
+            {design?.elements.map((element) => {
+              const element3D = convertTo3D(element);
+              return (
+                <Element3D
+                  key={element.id}
+                  element={element3D}
+                  isSelected={selectedElement?.id === element.id}
+                  onSelect={() => onElementSelect(element.id)}
+                  onUpdate={onElementUpdate}
+                />
+              );
+            })}
+          </Bounds>
+
+          {/* Room Boundaries */}
+          <RoomBoundaries design={design} />
+        </Suspense>
+      </Canvas>
+
+      {/* 3D Controls */}
+      <Canvas3DControls
+        lightingMode={lightingMode}
+        onLightingChange={setLightingMode}
+        showGrid={showGrid}
+        onToggleGrid={() => setShowGrid(!showGrid)}
+        showShadows={showShadows}
+        onToggleShadows={() => setShowShadows(!showShadows)}
+        environmentPreset={environmentPreset}
+        onEnvironmentChange={setEnvironmentPreset}
+        onResetCamera={resetCamera}
+        onToggleView={onToggleView}
+        viewMode={viewMode}
+      />
+
+      {/* Quality Settings */}
+      <QualitySettings
+        quality={renderQuality}
+        onQualityChange={setRenderQuality}
+      />
+    </div>
+  );
+};
+
+// 3D Element Component
+const Element3D = ({ element, isSelected, onSelect, onUpdate }) => {
+  const meshRef = useRef();
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto';
+  }, [hovered]);
+
+  const getElementGeometry = () => {
+    switch (element.type) {
+      case 'wall':
+        return <boxGeometry args={[element.width, 3, element.depth]} />;
+      case 'door':
+        return <boxGeometry args={[element.width, 2.5, 0.1]} />;
+      case 'window':
+        return <boxGeometry args={[element.width, 1.5, 0.1]} />;
+      case 'furniture':
+      case 'bed':
+      case 'desk':
+        return <boxGeometry args={[element.width, 0.8, element.height]} />;
+      case 'plant':
+        return <sphereGeometry args={[element.width / 2, 8, 6]} />;
+      case 'light':
+        return <sphereGeometry args={[element.width / 4, 8, 6]} />;
+      default:
+        return <boxGeometry args={[element.width, 1, element.height]} />;
+    }
+  };
+
+  const getMaterial = () => {
+    const baseColor = element.color;
+    const emissive = element.type === 'light' ? baseColor : '#000000';
+    const metalness = element.type === 'light' ? 0.8 : 0.1;
+    const roughness = element.type === 'plant' ? 0.8 : 0.3;
+
+    return (
+      <meshStandardMaterial
+        color={baseColor}
+        emissive={emissive}
+        emissiveIntensity={element.type === 'light' ? 0.3 : 0}
+        metalness={metalness}
+        roughness={roughness}
+        transparent={element.opacity < 1}
+        opacity={element.opacity || 1}
+      />
+    );
+  };
+
+  return (
+    <group position={[element.x, element.y, element.z]}>
+      <mesh
+        ref={meshRef}
+        castShadow
+        receiveShadow
+        onClick={onSelect}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+        scale={hovered ? 1.05 : 1}
+      >
+        {getElementGeometry()}
+        {getMaterial()}
+      </mesh>
+
+      {/* Selection Indicator */}
+      {isSelected && (
+        <mesh position={[0, -0.01, 0]}>
+          <ringGeometry args={[Math.max(element.width, element.height) * 0.6, Math.max(element.width, element.height) * 0.7, 32]} />
+          <meshBasicMaterial color="#8B5CF6" transparent opacity={0.5} />
+        </mesh>
+      )}
+
+      {/* Element Label */}
+      {(isSelected || hovered) && (
+        <Html position={[0, 2, 0]} center>
+          <div className="bg-white px-2 py-1 rounded shadow-lg text-xs font-medium text-gray-800 pointer-events-none">
+            {element.name}
+          </div>
+        </Html>
+      )}
+
+      {/* Light Effect */}
+      {element.type === 'light' && (
+        <pointLight
+          position={[0, 1, 0]}
+          color={element.color}
+          intensity={0.5}
+          distance={5}
+          decay={2}
+          castShadow
+        />
+      )}
+    </group>
+  );
+};
+
+// Lighting Setup Component
+const LightingSetup = ({ mode }) => {
+  return (
+    <>
+      {/* Ambient Light */}
+      <ambientLight intensity={mode === 'day' ? 0.6 : 0.2} />
+      
+      {/* Directional Light (Sun) */}
+      <directionalLight
+        position={[10, 10, 5]}
+        intensity={mode === 'day' ? 1 : 0.3}
+        castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
+      />
+      
+      {/* Fill Light */}
+      <directionalLight
+        position={[-5, 5, -5]}
+        intensity={mode === 'day' ? 0.3 : 0.1}
+      />
+
+      {/* Night Mode Additional Lighting */}
+      {mode === 'night' && (
+        <>
+          <pointLight position={[0, 5, 0]} intensity={0.5} color="#ffffff" />
+          <spotLight
+            position={[5, 8, 5]}
+            angle={0.3}
+            penumbra={1}
+            intensity={0.5}
+            castShadow
+          />
+        </>
+      )}
+    </>
+  );
+};
+
+// Room Boundaries Component
+const RoomBoundaries = ({ design }) => {
+  if (!design?.elements) return null;
+
+  const walls = design.elements.filter(el => el.type === 'wall');
+  
+  return (
+    <group>
+      {walls.map((wall) => {
+        const wall3D = {
+          x: (wall.x - 400) / 50,
+          y: 1.5,
+          z: -(wall.y - 300) / 50,
+          width: wall.width / 50,
+          height: 3,
+          depth: 0.2
+        };
+
+        return (
+          <mesh
+            key={wall.id}
+            position={[wall3D.x, wall3D.y, wall3D.z]}
+            castShadow
+            receiveShadow
+          >
+            <boxGeometry args={[wall3D.width, wall3D.height, wall3D.depth]} />
+            <meshStandardMaterial color={wall.color} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+};
+
+// Loading Fallback Component
+const LoadingFallback = () => {
+  const { progress } = useProgress();
+  
+  return (
+    <Html center>
+      <div className="flex flex-col items-center space-y-4">
+        <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+        <div className="text-gray-600 font-medium">Loading 3D Scene...</div>
+        <div className="text-sm text-gray-500">{Math.round(progress)}% loaded</div>
+      </div>
+    </Html>
+  );
+};
+
+// 3D Controls Component
+const Canvas3DControls = ({ 
+  lightingMode, 
+  onLightingChange, 
+  showGrid, 
+  onToggleGrid,
+  showShadows,
+  onToggleShadows,
+  environmentPreset,
+  onEnvironmentChange,
+  onResetCamera,
+  onToggleView,
+  viewMode 
+}) => {
+  const [showSettings, setShowSettings] = useState(false);
+
+  const environments = [
+    { id: 'city', name: 'City', icon: '🏙️' },
+    { id: 'sunset', name: 'Sunset', icon: '🌅' },
+    { id: 'dawn', name: 'Dawn', icon: '🌄' },
+    { id: 'night', name: 'Night', icon: '🌃' },
+    { id: 'studio', name: 'Studio', icon: '💡' },
+    { id: 'apartment', name: 'Apartment', icon: '🏠' }
+  ];
+
+  return (
+    <>
+      {/* Main Controls */}
+      <div className="absolute bottom-4 right-4 flex flex-col space-y-2">
+        {/* View Toggle */}
+        <button
+          onClick={onToggleView}
+          className={`p-3 rounded-full shadow-lg transition-all ${
+            viewMode === '2d' 
+              ? 'bg-purple-600 text-white' 
+              : 'bg-white text-gray-700 hover:bg-gray-50'
+          }`}
+          title="Toggle 2D View"
+        >
+          <Layers className="h-5 w-5" />
+        </button>
+
+        {/* Lighting Toggle */}
+        <button
+          onClick={() => onLightingChange(lightingMode === 'day' ? 'night' : 'day')}
+          className={`p-3 rounded-full shadow-lg transition-all ${
+            lightingMode === 'night' 
+              ? 'bg-indigo-600 text-white' 
+              : 'bg-yellow-500 text-white'
+          }`}
+          title={`Switch to ${lightingMode === 'day' ? 'Night' : 'Day'} Mode`}
+        >
+          {lightingMode === 'day' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+        </button>
+
+        {/* Grid Toggle */}
+        <button
+          onClick={onToggleGrid}
+          className={`p-3 rounded-full shadow-lg transition-all ${
+            showGrid 
+              ? 'bg-green-600 text-white' 
+              : 'bg-white text-gray-700 hover:bg-gray-50'
+          }`}
+          title="Toggle Grid"
+        >
+          <Home className="h-5 w-5" />
+        </button>
+
+        {/* Reset Camera */}
+        <button
+          onClick={onResetCamera}
+          className="p-3 bg-white rounded-full shadow-lg text-gray-700 hover:bg-gray-50 transition-colors"
+          title="Reset Camera"
+        >
+          <RotateCcw className="h-5 w-5" />
+        </button>
+
+        {/* Settings */}
+        <button
+          onClick={() => setShowSettings(!showSettings)}
+          className={`p-3 rounded-full shadow-lg transition-all ${
+            showSettings 
+              ? 'bg-gray-600 text-white' 
+              : 'bg-white text-gray-700 hover:bg-gray-50'
+          }`}
+          title="3D Settings"
+        >
+          <Settings className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* Settings Panel */}
+      {showSettings && (
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 20 }}
+          className="absolute bottom-4 right-20 bg-white rounded-xl shadow-xl border border-gray-200 p-6 w-80"
+        >
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">3D Settings</h3>
+          
+          {/* Environment */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Environment
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {environments.map((env) => (
+                <button
+                  key={env.id}
+                  onClick={() => onEnvironmentChange(env.id)}
+                  className={`p-2 text-xs rounded-lg border transition-all ${
+                    environmentPreset === env.id
+                      ? 'border-purple-500 bg-purple-50 text-purple-700'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="text-lg mb-1">{env.icon}</div>
+                  <div>{env.name}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Shadows Toggle */}
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-700">Shadows</span>
+            <button
+              onClick={onToggleShadows}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                showShadows ? 'bg-purple-600' : 'bg-gray-200'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  showShadows ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </>
+  );
+};
+
+// Quality Settings Component
+const QualitySettings = ({ quality, onQualityChange }) => {
+  return (
+    <div className="absolute top-4 right-4">
+      <select
+        value={quality}
+        onChange={(e) => onQualityChange(e.target.value)}
+        className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+      >
+        <option value="low">Low Quality</option>
+        <option value="medium">Medium Quality</option>
+        <option value="high">High Quality</option>
+      </select>
+    </div>
+  );
+};
+
+export default Canvas3D;
