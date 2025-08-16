@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Stage, Layer, Rect, Circle, Group, Text, Line, Image as KonvaImage } from 'react-konva';
+import { Stage, Layer, Rect, Circle, Group, Text, Line } from 'react-konva';
 import { motion } from 'framer-motion';
 import { 
   Grid3X3, 
@@ -13,7 +13,8 @@ import {
   EyeOff,
   ZoomIn,
   ZoomOut,
-  Maximize2
+  Maximize2,
+  Layers
 } from 'lucide-react';
 
 const Canvas2D = ({ 
@@ -23,8 +24,8 @@ const Canvas2D = ({
   onElementUpdate, 
   onElementDelete,
   onElementDuplicate,
-  gridEnabled, 
-  snapToGrid,
+  gridEnabled = true, 
+  snapToGrid = true,
   onAddElement,
   viewMode,
   onToggleView
@@ -34,9 +35,6 @@ const Canvas2D = ({
   const [zoom, setZoom] = useState(1);
   const [stagePos, setStagePos] = useState({ x: 0, y: 0 });
   const [draggedElement, setDraggedElement] = useState(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [drawingTool, setDrawingTool] = useState(null);
-  const [measurements, setMeasurements] = useState([]);
   const [showMeasurements, setShowMeasurements] = useState(false);
 
   // Update stage size on container resize
@@ -268,24 +266,30 @@ const DesignElement = ({
     });
   };
 
+  // Handle click
+  const handleClick = (event) => {
+    event.cancelBubble = true;
+    onSelect();
+  };
+
+  // Render different shapes based on element type
   const renderShape = () => {
     const commonProps = {
       ref: shapeRef,
       x: element.x,
       y: element.y,
-      rotation: element.rotation,
+      rotation: element.rotation || 0,
       fill: element.color,
-      stroke: isSelected ? '#8B5CF6' : undefined,
+      stroke: isSelected ? '#A7727D' : undefined,
       strokeWidth: isSelected ? 3 / zoom : 0,
       opacity: isDragged ? 0.7 : (element.opacity || 1),
       draggable: !element.locked,
-      onClick: onSelect,
+      onClick: handleClick,
       onDragStart: onDragStart,
       onDragEnd: onDragEnd,
       onTransformEnd: handleTransformEnd,
     };
 
-    // Render different shapes based on element type
     if (['furniture', 'plant', 'light'].includes(element.type)) {
       return (
         <Circle
@@ -388,14 +392,10 @@ const Canvas2DControls = ({
       {/* View Toggle */}
       <button
         onClick={onToggleView}
-        className={`p-3 rounded-full shadow-lg transition-all ${
-          viewMode === '3d' 
-            ? 'bg-purple-600 text-white' 
-            : 'bg-white text-gray-700 hover:bg-gray-50'
-        }`}
+        className="p-3 bg-white rounded-full shadow-lg text-gray-700 hover:bg-gray-50 transition-colors"
         title="Toggle 3D View"
       >
-        <Maximize2 className="h-5 w-5" />
+        <Layers className="h-5 w-5" />
       </button>
 
       {/* Zoom Controls */}
@@ -432,7 +432,7 @@ const Canvas2DControls = ({
         onClick={onToggleMeasurements}
         className={`p-3 rounded-full shadow-lg transition-all ${
           showMeasurements 
-            ? 'bg-blue-600 text-white' 
+            ? 'bg-primary-600 text-white' 
             : 'bg-white text-gray-700 hover:bg-gray-50'
         }`}
         title="Toggle Measurements"
@@ -453,9 +453,9 @@ const ElementToolbar = ({ element, onUpdate, onDelete, onDuplicate }) => {
     >
       <button
         onClick={() => onUpdate(element.id, { 
-          rotation: (element.rotation + 45) % 360 
+          rotation: ((element.rotation || 0) + 45) % 360 
         })}
-        className="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+        className="p-2 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
         title="Rotate"
       >
         <RotateCw className="h-4 w-4" />

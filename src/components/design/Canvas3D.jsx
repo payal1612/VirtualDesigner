@@ -4,7 +4,6 @@ import {
   OrbitControls, 
   Environment, 
   Grid, 
-  useGLTF, 
   Text3D, 
   Center,
   Bounds,
@@ -26,6 +25,16 @@ import {
   Download,
   Maximize2,
   Eye,
+  EyeOff,
+  Lock,
+  Unlock,
+  Volume2,
+  VolumeX,
+  Wifi,
+  WifiOff,
+  Database,
+  HardDrive,
+  Cloud,
   Layers,
   Palette
 } from 'lucide-react';
@@ -45,6 +54,7 @@ const Canvas3D = ({
   const [showShadows, setShowShadows] = useState(true);
   const [environmentPreset, setEnvironmentPreset] = useState('city');
   const [renderQuality, setRenderQuality] = useState('medium');
+  const [showSettings, setShowSettings] = useState(false);
   const controlsRef = useRef();
 
   // Reset camera view
@@ -58,9 +68,9 @@ const Canvas3D = ({
   const convertTo3D = (element) => {
     return {
       ...element,
-      x: (element.x - 400) / 50, // Scale and center
-      y: 0, // Ground level
-      z: -(element.y - 300) / 50, // Flip Z for proper orientation
+      x: (element.x - 400) / 50,
+      y: 0,
+      z: -(element.y - 300) / 50,
       width: element.width / 50,
       height: element.height / 50,
       depth: element.type === 'wall' ? 0.2 : 1
@@ -138,7 +148,7 @@ const Canvas3D = ({
 
           {/* 3D Elements */}
           <Bounds fit clip observe margin={1.2}>
-            {design?.elements.map((element) => {
+            {design?.elements?.map((element) => {
               const element3D = convertTo3D(element);
               return (
                 <Element3D
@@ -170,6 +180,8 @@ const Canvas3D = ({
         onResetCamera={resetCamera}
         onToggleView={onToggleView}
         viewMode={viewMode}
+        showSettings={showSettings}
+        onToggleSettings={() => setShowSettings(!showSettings)}
       />
 
       {/* Quality Settings */}
@@ -249,7 +261,7 @@ const Element3D = ({ element, isSelected, onSelect, onUpdate }) => {
       {isSelected && (
         <mesh position={[0, -0.01, 0]}>
           <ringGeometry args={[Math.max(element.width, element.height) * 0.6, Math.max(element.width, element.height) * 0.7, 32]} />
-          <meshBasicMaterial color="#8B5CF6" transparent opacity={0.5} />
+          <meshBasicMaterial color="#A7727D" transparent opacity={0.5} />
         </mesh>
       )}
 
@@ -281,10 +293,7 @@ const Element3D = ({ element, isSelected, onSelect, onUpdate }) => {
 const LightingSetup = ({ mode }) => {
   return (
     <>
-      {/* Ambient Light */}
       <ambientLight intensity={mode === 'day' ? 0.6 : 0.2} />
-      
-      {/* Directional Light (Sun) */}
       <directionalLight
         position={[10, 10, 5]}
         intensity={mode === 'day' ? 1 : 0.3}
@@ -297,14 +306,11 @@ const LightingSetup = ({ mode }) => {
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
       />
-      
-      {/* Fill Light */}
       <directionalLight
         position={[-5, 5, -5]}
         intensity={mode === 'day' ? 0.3 : 0.1}
       />
 
-      {/* Night Mode Additional Lighting */}
       {mode === 'night' && (
         <>
           <pointLight position={[0, 5, 0]} intensity={0.5} color="#ffffff" />
@@ -362,7 +368,7 @@ const LoadingFallback = () => {
   return (
     <Html center>
       <div className="flex flex-col items-center space-y-4">
-        <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+        <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"></div>
         <div className="text-gray-600 font-medium">Loading 3D Scene...</div>
         <div className="text-sm text-gray-500">{Math.round(progress)}% loaded</div>
       </div>
@@ -382,10 +388,10 @@ const Canvas3DControls = ({
   onEnvironmentChange,
   onResetCamera,
   onToggleView,
-  viewMode 
+  viewMode,
+  showSettings,
+  onToggleSettings
 }) => {
-  const [showSettings, setShowSettings] = useState(false);
-
   const environments = [
     { id: 'city', name: 'City', icon: '🏙️' },
     { id: 'sunset', name: 'Sunset', icon: '🌅' },
@@ -402,11 +408,7 @@ const Canvas3DControls = ({
         {/* View Toggle */}
         <button
           onClick={onToggleView}
-          className={`p-3 rounded-full shadow-lg transition-all ${
-            viewMode === '2d' 
-              ? 'bg-purple-600 text-white' 
-              : 'bg-white text-gray-700 hover:bg-gray-50'
-          }`}
+          className="p-3 bg-white rounded-full shadow-lg text-gray-700 hover:bg-gray-50 transition-colors"
           title="Toggle 2D View"
         >
           <Layers className="h-5 w-5" />
@@ -449,7 +451,7 @@ const Canvas3DControls = ({
 
         {/* Settings */}
         <button
-          onClick={() => setShowSettings(!showSettings)}
+          onClick={onToggleSettings}
           className={`p-3 rounded-full shadow-lg transition-all ${
             showSettings 
               ? 'bg-gray-600 text-white' 
@@ -483,7 +485,7 @@ const Canvas3DControls = ({
                   onClick={() => onEnvironmentChange(env.id)}
                   className={`p-2 text-xs rounded-lg border transition-all ${
                     environmentPreset === env.id
-                      ? 'border-purple-500 bg-purple-50 text-purple-700'
+                      ? 'border-primary-500 bg-primary-50 text-primary-700'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -500,7 +502,7 @@ const Canvas3DControls = ({
             <button
               onClick={onToggleShadows}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                showShadows ? 'bg-purple-600' : 'bg-gray-200'
+                showShadows ? 'bg-primary-600' : 'bg-gray-200'
               }`}
             >
               <span
@@ -523,7 +525,7 @@ const QualitySettings = ({ quality, onQualityChange }) => {
       <select
         value={quality}
         onChange={(e) => onQualityChange(e.target.value)}
-        className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+        className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
       >
         <option value="low">Low Quality</option>
         <option value="medium">Medium Quality</option>

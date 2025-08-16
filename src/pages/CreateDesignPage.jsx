@@ -21,19 +21,49 @@ import {
   Shuffle,
   Check,
   Ruler,
-  Grid3X3
+  Grid3X3,
+  Plus,
+  Save,
+  Eye,
+  Layers,
+  Camera,
+  Download,
+  Share2,
+  Settings,
+  Palette,
+  Move,
+  RotateCcw,
+  ZoomIn,
+  ZoomOut
 } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDesignStore } from '../stores/designStore';
 import { useAuthStore } from '../stores/authStore';
+import Canvas2D from '../components/design/Canvas2D';
+import Canvas3D from '../components/design/Canvas3D';
+import FurnitureLibrary from '../components/design/FurnitureLibrary';
 
 const CreateDesignPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { createNewDesign, loadDesign, savedDesigns } = useDesignStore();
+  const { 
+    currentDesign, 
+    selectedElement,
+    createNewDesign, 
+    loadDesign, 
+    savedDesigns,
+    addElement,
+    updateElement,
+    deleteElement,
+    selectElement,
+    saveCurrentDesign,
+    setViewMode,
+    viewMode
+  } = useDesignStore();
   const { isAuthenticated } = useAuthStore();
   
   const [currentStep, setCurrentStep] = useState(1);
+  const [showFurnitureLibrary, setShowFurnitureLibrary] = useState(false);
   const [wizardData, setWizardData] = useState({
     roomShape: 'square',
     roomWidth: 500,
@@ -46,7 +76,6 @@ const CreateDesignPage = () => {
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      // Show a message and redirect to home with auth modal trigger
       const notification = document.createElement('div');
       notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
       notification.textContent = 'Please sign in to start designing';
@@ -66,8 +95,7 @@ const CreateDesignPage = () => {
       const existingDesign = savedDesigns.find(d => d.id === designId);
       if (existingDesign) {
         loadDesign(existingDesign);
-        // Skip wizard and go directly to design canvas
-        setCurrentStep(4);
+        setCurrentStep(4); // Skip wizard and go to canvas
       }
     }
   }, [isAuthenticated, navigate, searchParams, savedDesigns, loadDesign]);
@@ -93,37 +121,37 @@ const CreateDesignPage = () => {
   const roomStyles = [
     {
       id: 'modern1',
-      name: 'Modern 1',
+      name: 'Modern',
       thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Clean lines and minimalist design'
     },
     {
       id: 'classic1',
-      name: 'Classic 1',
+      name: 'Classic',
       thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Traditional and elegant styling'
     },
     {
       id: 'scandinavian1',
-      name: 'Scandinavian 1',
+      name: 'Scandinavian',
       thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Light woods and cozy textures'
     },
     {
       id: 'industrial1',
-      name: 'Industrial 1',
+      name: 'Industrial',
       thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Raw materials and urban feel'
     },
     {
       id: 'bohemian1',
-      name: 'Bohemian 1',
+      name: 'Bohemian',
       thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Eclectic and artistic vibe'
     },
     {
       id: 'minimalist1',
-      name: 'Minimalist 1',
+      name: 'Minimalist',
       thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=300',
       description: 'Simple and uncluttered'
     }
@@ -132,7 +160,7 @@ const CreateDesignPage = () => {
   const calculateArea = () => {
     const widthM = wizardData.roomWidth / 100;
     const heightM = wizardData.roomHeight / 100;
-    return (widthM * heightM).toFixed(3);
+    return (widthM * heightM).toFixed(2);
   };
 
   const handleNext = () => {
@@ -164,14 +192,202 @@ const CreateDesignPage = () => {
     updateWizardData('roomStyle', roomStyles[nextIndex].id);
   };
 
+  // Handle element operations
+  const handleAddElement = (element) => {
+    addElement(element);
+    setShowFurnitureLibrary(false);
+  };
+
+  const handleElementSelect = (elementId) => {
+    selectElement(elementId);
+  };
+
+  const handleElementUpdate = (elementId, updates) => {
+    updateElement(elementId, updates);
+  };
+
+  const handleElementDelete = (elementId) => {
+    deleteElement(elementId);
+  };
+
+  const handleElementDuplicate = (element) => {
+    const duplicatedElement = {
+      ...element,
+      id: `element_${Date.now()}`,
+      x: element.x + 20,
+      y: element.y + 20,
+      name: `${element.name} Copy`
+    };
+    addElement(duplicatedElement);
+  };
+
+  const handleSaveDesign = () => {
+    const savedDesign = saveCurrentDesign();
+    if (savedDesign) {
+      showNotification('Design saved successfully!', 'success');
+    }
+  };
+
+  const handleToggleView = () => {
+    const newViewMode = viewMode === '2d' ? '3d' : '2d';
+    setViewMode(newViewMode);
+  };
+
+  const showNotification = (message, type = 'info') => {
+    const notification = document.createElement('div');
+    const colors = {
+      success: 'bg-green-500',
+      error: 'bg-red-500',
+      info: 'bg-blue-500'
+    };
+    notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => {
+      if (document.body.contains(notification)) {
+        document.body.removeChild(notification);
+      }
+    }, 3000);
+  };
+
   if (!isAuthenticated) {
-    return null; // Will redirect in useEffect
+    return null;
   }
 
+  // Render Design Canvas
   if (currentStep === 4) {
-    return <DesignCanvas />;
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Canvas Header */}
+        <div className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <ArrowLeft className="h-5 w-5" />
+                <span>Back to Dashboard</span>
+              </button>
+              <div>
+                <h1 className="text-xl font-semibold text-gray-900">
+                  {currentDesign?.name || 'New Design'}
+                </h1>
+                <p className="text-sm text-gray-600">
+                  {currentDesign?.elements?.length || 0} elements • {viewMode.toUpperCase()} View
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              {/* View Mode Toggle */}
+              <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode('2d')}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    viewMode === '2d' 
+                      ? 'bg-white text-primary-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  2D
+                </button>
+                <button
+                  onClick={() => setViewMode('3d')}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    viewMode === '3d' 
+                      ? 'bg-white text-primary-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  3D
+                </button>
+              </div>
+
+              {/* Add Furniture */}
+              <button
+                onClick={() => setShowFurnitureLibrary(true)}
+                className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                <Plus className="h-5 w-5" />
+                <span>Add Furniture</span>
+              </button>
+
+              {/* Save Design */}
+              <button
+                onClick={handleSaveDesign}
+                className="flex items-center space-x-2 px-4 py-2 bg-cream-600 text-white rounded-lg hover:bg-cream-700 transition-colors"
+              >
+                <Save className="h-5 w-5" />
+                <span>Save</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Canvas Area */}
+        <div className="flex h-[calc(100vh-80px)]">
+          {/* Left Sidebar - Element Properties */}
+          {selectedElement && (
+            <div className="w-80 bg-white border-r border-gray-200 p-6 overflow-y-auto">
+              <ElementProperties
+                element={selectedElement}
+                onUpdate={handleElementUpdate}
+                onDelete={() => handleElementDelete(selectedElement.id)}
+                onDuplicate={() => handleElementDuplicate(selectedElement)}
+              />
+            </div>
+          )}
+
+          {/* Main Canvas */}
+          <div className="flex-1 relative">
+            {viewMode === '2d' ? (
+              <Canvas2D
+                design={currentDesign}
+                selectedElement={selectedElement}
+                onElementSelect={handleElementSelect}
+                onElementUpdate={handleElementUpdate}
+                onElementDelete={handleElementDelete}
+                onElementDuplicate={handleElementDuplicate}
+                onAddElement={handleAddElement}
+                gridEnabled={true}
+                snapToGrid={true}
+                viewMode={viewMode}
+                onToggleView={handleToggleView}
+              />
+            ) : (
+              <Canvas3D
+                design={currentDesign}
+                selectedElement={selectedElement}
+                onElementSelect={handleElementSelect}
+                onElementUpdate={handleElementUpdate}
+                viewMode={viewMode}
+                onToggleView={handleToggleView}
+              />
+            )}
+          </div>
+
+          {/* Right Sidebar - Tools */}
+          <div className="w-64 bg-white border-l border-gray-200 p-6 overflow-y-auto">
+            <DesignTools
+              onAddFurniture={() => setShowFurnitureLibrary(true)}
+              onSave={handleSaveDesign}
+              currentDesign={currentDesign}
+            />
+          </div>
+        </div>
+
+        {/* Furniture Library Modal */}
+        <FurnitureLibrary
+          isOpen={showFurnitureLibrary}
+          onClose={() => setShowFurnitureLibrary(false)}
+          onAddElement={handleAddElement}
+        />
+      </div>
+    );
   }
 
+  // Wizard Steps
   return (
     <div className="min-h-screen bg-gradient-to-br from-lightest-50 to-cream-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -181,8 +397,8 @@ const CreateDesignPage = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Smart Wizard - Planner 5D</h1>
-          <p className="text-gray-600">Create your perfect room in 3 easy steps</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Design</h1>
+          <p className="text-gray-600">Design your perfect room in 3 easy steps</p>
         </motion.div>
 
         {/* Progress Indicator */}
@@ -288,7 +504,6 @@ const Step1Content = ({ wizardData, updateWizardData, roomShapes }) => (
   >
     <h2 className="text-2xl font-bold text-gray-900 mb-6">Choose room shape</h2>
     
-    {/* Shape Selection Grid */}
     <div className="grid grid-cols-3 gap-4 mb-8">
       {roomShapes.map((shape) => (
         <button
@@ -308,7 +523,6 @@ const Step1Content = ({ wizardData, updateWizardData, roomShapes }) => (
       ))}
     </div>
 
-    {/* Transform Options */}
     <div className="space-y-4">
       <h3 className="text-lg font-semibold text-gray-900">Transform</h3>
       <div className="flex space-x-4">
@@ -318,11 +532,11 @@ const Step1Content = ({ wizardData, updateWizardData, roomShapes }) => (
         </button>
         <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
           <FlipHorizontal className="h-4 w-4" />
-          <span>Flip Horizontal</span>
+          <span>Flip H</span>
         </button>
         <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
           <FlipVertical className="h-4 w-4" />
-          <span>Flip Vertical</span>
+          <span>Flip V</span>
         </button>
       </div>
     </div>
@@ -338,10 +552,9 @@ const Step2Content = ({ wizardData, updateWizardData }) => (
   >
     <h2 className="text-2xl font-bold text-gray-900 mb-6">Add room dimensions</h2>
     
-    {/* Width Slider */}
     <div className="mb-6">
       <label className="block text-sm font-medium text-gray-700 mb-3">
-        Width: {wizardData.roomWidth.toFixed(2)} {wizardData.unit}
+        Width: {wizardData.roomWidth} {wizardData.unit}
       </label>
       <input
         type="range"
@@ -353,10 +566,9 @@ const Step2Content = ({ wizardData, updateWizardData }) => (
       />
     </div>
 
-    {/* Height Slider */}
     <div className="mb-8">
       <label className="block text-sm font-medium text-gray-700 mb-3">
-        Height: {wizardData.roomHeight.toFixed(2)} {wizardData.unit}
+        Height: {wizardData.roomHeight} {wizardData.unit}
       </label>
       <input
         type="range"
@@ -368,7 +580,6 @@ const Step2Content = ({ wizardData, updateWizardData }) => (
       />
     </div>
 
-    {/* Unit Toggle */}
     <div className="space-y-4">
       <h3 className="text-lg font-semibold text-gray-900">Units</h3>
       <div className="flex space-x-2">
@@ -397,33 +608,34 @@ const Step2Content = ({ wizardData, updateWizardData }) => (
   </motion.div>
 );
 
-// Step 3: Room Type and Style
+// Step 3: Room Type and Style - FIXED
 const Step3Content = ({ wizardData, updateWizardData, roomTypes, roomStyles, onShuffle }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -20 }}
+    className="h-full"
   >
     <h2 className="text-2xl font-bold text-gray-900 mb-6">Select room type and style</h2>
     
     {/* Room Type Selection */}
     <div className="mb-8">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Room Type</h3>
-      <div className="space-y-2">
+      <div className="grid grid-cols-2 gap-3">
         {roomTypes.map((type) => (
           <button
             key={type.id}
             onClick={() => updateWizardData('roomType', type.id)}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg border-2 transition-all ${
+            className={`flex items-center space-x-3 px-4 py-3 rounded-lg border-2 transition-all ${
               wizardData.roomType === type.id
                 ? 'border-primary-500 bg-primary-50 text-primary-700'
                 : 'border-gray-200 hover:border-gray-300 text-gray-700'
             }`}
           >
             <type.icon className="h-5 w-5" />
-            <span className="font-medium">{type.name}</span>
+            <span className="font-medium text-sm">{type.name}</span>
             {wizardData.roomType === type.id && (
-              <Check className="h-5 w-5 ml-auto text-primary-600" />
+              <Check className="h-4 w-4 ml-auto text-primary-600" />
             )}
           </button>
         ))}
@@ -432,8 +644,17 @@ const Step3Content = ({ wizardData, updateWizardData, roomTypes, roomStyles, onS
 
     {/* Style Selection */}
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Style</h3>
-      <div className="grid grid-cols-2 gap-4 max-h-64 overflow-y-auto">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-gray-900">Style</h3>
+        <button
+          onClick={onShuffle}
+          className="flex items-center space-x-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+        >
+          <Shuffle className="h-4 w-4" />
+          <span className="text-sm">Shuffle</span>
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-4 max-h-80 overflow-y-auto">
         {roomStyles.map((style) => (
           <button
             key={style.id}
@@ -470,10 +691,10 @@ const RoomPreview = ({ wizardData, currentStep, calculateArea }) => {
   const getWallColors = () => {
     if (currentStep === 2) {
       return {
-        top: '#F97316', // Orange
-        bottom: '#F97316', // Orange
-        left: '#3B82F6', // Blue
-        right: '#3B82F6' // Blue
+        top: '#F97316',
+        bottom: '#F97316',
+        left: '#3B82F6',
+        right: '#3B82F6'
       };
     }
     return {
@@ -492,7 +713,6 @@ const RoomPreview = ({ wizardData, currentStep, calculateArea }) => {
     <div className="h-full flex flex-col">
       <h3 className="text-xl font-semibold text-gray-900 mb-6">Room Preview</h3>
       
-      {/* 2D Room View */}
       <div className="flex-1 flex items-center justify-center bg-gray-50 rounded-xl relative overflow-hidden">
         {/* Grid Background */}
         <div className="absolute inset-0 opacity-20">
@@ -506,7 +726,6 @@ const RoomPreview = ({ wizardData, currentStep, calculateArea }) => {
           </svg>
         </div>
 
-        {/* Room Container */}
         <div className="relative">
           {/* Dimension Labels */}
           <div className="absolute -top-8 left-0 right-0 text-center">
@@ -522,14 +741,14 @@ const RoomPreview = ({ wizardData, currentStep, calculateArea }) => {
 
           {/* Room Shape */}
           <div 
-            className="relative bg-gradient-to-br from-amber-100 to-amber-200 border-4 border-gray-300"
+            className="relative bg-gradient-to-br from-beige-100 to-beige-200 border-4 border-gray-300"
             style={{
               width: `${roomWidthPx}px`,
               height: `${roomHeightPx}px`,
               borderRadius: wizardData.roomShape === 'circle' ? '50%' : '8px'
             }}
           >
-            {/* Wooden Floor Texture */}
+            {/* Floor Texture */}
             <div 
               className="absolute inset-1 opacity-30"
               style={{
@@ -547,22 +766,18 @@ const RoomPreview = ({ wizardData, currentStep, calculateArea }) => {
             {/* Walls with Step 2 Colors */}
             {currentStep >= 2 && (
               <>
-                {/* Top Wall */}
                 <div 
                   className="absolute top-0 left-0 right-0 h-2"
                   style={{ backgroundColor: wallColors.top }}
                 />
-                {/* Bottom Wall */}
                 <div 
                   className="absolute bottom-0 left-0 right-0 h-2"
                   style={{ backgroundColor: wallColors.bottom }}
                 />
-                {/* Left Wall */}
                 <div 
                   className="absolute top-0 bottom-0 left-0 w-2"
                   style={{ backgroundColor: wallColors.left }}
                 />
-                {/* Right Wall */}
                 <div 
                   className="absolute top-0 bottom-0 right-0 w-2"
                   style={{ backgroundColor: wallColors.right }}
@@ -608,16 +823,8 @@ const RoomPreview = ({ wizardData, currentStep, calculateArea }) => {
               <div className="w-full h-32 bg-gradient-to-b from-blue-900 to-purple-900 rounded-lg flex items-center justify-center relative">
                 <div className="text-center">
                   <Grid3X3 className="h-8 w-8 mx-auto mb-2 opacity-75" />
-                  <p className="text-sm opacity-75">3D Rendering</p>
+                  <p className="text-sm opacity-75">3D Rendering Ready</p>
                 </div>
-                
-                {/* Shuffle Button */}
-                <button
-                  onClick={onShuffle}
-                  className="absolute bottom-2 right-2 p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors"
-                >
-                  <Shuffle className="h-4 w-4" />
-                </button>
               </div>
             </div>
           </div>
@@ -627,18 +834,190 @@ const RoomPreview = ({ wizardData, currentStep, calculateArea }) => {
   );
 };
 
-// Design Canvas Component (placeholder for now)
-const DesignCanvas = () => {
+// Element Properties Panel
+const ElementProperties = ({ element, onUpdate, onDelete, onDuplicate }) => {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <Grid3X3 className="h-8 w-8 text-white" />
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Element Properties</h3>
+        <div className="space-y-4">
+          {/* Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+            <input
+              type="text"
+              value={element.name}
+              onChange={(e) => onUpdate(element.id, { name: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Position */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">X Position</label>
+              <input
+                type="number"
+                value={Math.round(element.x)}
+                onChange={(e) => onUpdate(element.id, { x: parseInt(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Y Position</label>
+              <input
+                type="number"
+                value={Math.round(element.y)}
+                onChange={(e) => onUpdate(element.id, { y: parseInt(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          {/* Size */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Width</label>
+              <input
+                type="number"
+                value={Math.round(element.width)}
+                onChange={(e) => onUpdate(element.id, { width: parseInt(e.target.value) || 1 })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Height</label>
+              <input
+                type="number"
+                value={Math.round(element.height)}
+                onChange={(e) => onUpdate(element.id, { height: parseInt(e.target.value) || 1 })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          {/* Color */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Color</label>
+            <input
+              type="color"
+              value={element.color}
+              onChange={(e) => onUpdate(element.id, { color: e.target.value })}
+              className="w-full h-10 border border-gray-300 rounded-lg cursor-pointer"
+            />
+          </div>
+
+          {/* Rotation */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Rotation: {element.rotation || 0}°
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="360"
+              value={element.rotation || 0}
+              onChange={(e) => onUpdate(element.id, { rotation: parseInt(e.target.value) })}
+              className="w-full"
+            />
+          </div>
+
+          {/* Opacity */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Opacity: {Math.round((element.opacity || 1) * 100)}%
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={element.opacity || 1}
+              onChange={(e) => onUpdate(element.id, { opacity: parseFloat(e.target.value) })}
+              className="w-full"
+            />
+          </div>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Design Canvas</h2>
-        <p className="text-gray-600 mb-6">Your design workspace will appear here</p>
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 max-w-md mx-auto">
-          <p className="text-gray-500">Canvas implementation coming soon...</p>
+      </div>
+
+      {/* Actions */}
+      <div className="space-y-3">
+        <button
+          onClick={onDuplicate}
+          className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+          <span>Duplicate</span>
+        </button>
+        <button
+          onClick={onDelete}
+          className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+        >
+          <X className="h-4 w-4" />
+          <span>Delete</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Design Tools Panel
+const DesignTools = ({ onAddFurniture, onSave, currentDesign }) => {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Design Tools</h3>
+        
+        <div className="space-y-3">
+          <button
+            onClick={onAddFurniture}
+            className="w-full flex items-center space-x-2 px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <Plus className="h-5 w-5" />
+            <span>Add Furniture</span>
+          </button>
+
+          <button
+            onClick={onSave}
+            className="w-full flex items-center space-x-2 px-4 py-3 bg-cream-600 text-white rounded-lg hover:bg-cream-700 transition-colors"
+          >
+            <Save className="h-5 w-5" />
+            <span>Save Design</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Design Info */}
+      <div className="bg-gray-50 rounded-lg p-4">
+        <h4 className="font-medium text-gray-900 mb-2">Design Info</h4>
+        <div className="space-y-2 text-sm text-gray-600">
+          <div className="flex justify-between">
+            <span>Elements:</span>
+            <span>{currentDesign?.elements?.length || 0}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Last saved:</span>
+            <span>{currentDesign?.updatedAt ? new Date(currentDesign.updatedAt).toLocaleTimeString() : 'Never'}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="space-y-2">
+        <h4 className="font-medium text-gray-900">Quick Actions</h4>
+        <div className="grid grid-cols-2 gap-2">
+          <button className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+            <Download className="h-4 w-4 mx-auto" />
+          </button>
+          <button className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+            <Share2 className="h-4 w-4 mx-auto" />
+          </button>
+          <button className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+            <Camera className="h-4 w-4 mx-auto" />
+          </button>
+          <button className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+            <Settings className="h-4 w-4 mx-auto" />
+          </button>
         </div>
       </div>
     </div>

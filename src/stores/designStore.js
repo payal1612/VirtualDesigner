@@ -298,6 +298,7 @@ export const useDesignStore = create()(
         set({ currentDesign: newDesign, selectedElement: null });
       },
 
+      // Add element to current design
       addElement: (element) => {
         const { currentDesign } = get();
         if (!currentDesign) return;
@@ -318,6 +319,7 @@ export const useDesignStore = create()(
         set({ currentDesign: updatedDesign });
       },
 
+      // Update element properties
       updateElement: (id, updates) => {
         const { currentDesign, selectedElement } = get();
         if (!currentDesign) return;
@@ -342,6 +344,7 @@ export const useDesignStore = create()(
         });
       },
 
+      // Delete element from design
       deleteElement: (id) => {
         const { currentDesign, selectedElement } = get();
         if (!currentDesign) return;
@@ -359,6 +362,7 @@ export const useDesignStore = create()(
         });
       },
 
+      // Select element for editing
       selectElement: (id) => {
         const { currentDesign } = get();
         if (!currentDesign) return;
@@ -367,6 +371,7 @@ export const useDesignStore = create()(
         set({ selectedElement: element });
       },
 
+      // Save current design to saved designs
       saveCurrentDesign: () => {
         const { currentDesign, savedDesigns } = get();
         if (!currentDesign) return;
@@ -396,12 +401,14 @@ export const useDesignStore = create()(
         return updatedDesign;
       },
 
+      // Load design into current design
       loadDesign: (design) => {
         // Create a deep copy to avoid reference issues
         const designCopy = JSON.parse(JSON.stringify(design));
         set({ currentDesign: designCopy, selectedElement: null });
       },
 
+      // Delete saved design
       deleteDesign: (id) => {
         const { savedDesigns, currentDesign } = get();
         const updatedSavedDesigns = savedDesigns.filter(d => d.id !== id);
@@ -416,6 +423,7 @@ export const useDesignStore = create()(
         });
       },
 
+      // Duplicate existing design
       duplicateDesign: (design) => {
         const { savedDesigns } = get();
         const newDesign = {
@@ -433,6 +441,11 @@ export const useDesignStore = create()(
         return newDesign;
       },
 
+      // Set view mode (2d or 3d)
+      setViewMode: (mode) => {
+        set({ viewMode: mode });
+      },
+
       fetchSavedDesigns: () => {
         // This would normally fetch from a database
         // For now, designs are persisted in localStorage via zustand persist
@@ -441,10 +454,6 @@ export const useDesignStore = create()(
       fetchTemplates: () => {
         // Templates are now hardcoded in the store
         // This function exists for compatibility
-      },
-
-      setViewMode: (mode) => {
-        set({ viewMode: mode });
       },
 
       // Bulk operations
