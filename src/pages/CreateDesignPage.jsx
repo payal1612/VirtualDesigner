@@ -462,6 +462,7 @@ const CreateDesignPage = () => {
               wizardData={wizardData} 
               currentStep={currentStep}
               calculateArea={calculateArea}
+             roomStyles={roomStyles}
             />
           </motion.div>
         </div>
@@ -687,7 +688,7 @@ const Step3Content = ({ wizardData, updateWizardData, roomTypes, roomStyles, onS
 );
 
 // Room Preview Component
-const RoomPreview = ({ wizardData, currentStep, calculateArea }) => {
+const RoomPreview = ({ wizardData, currentStep, calculateArea, roomStyles }) => {
   const getWallColors = () => {
     if (currentStep === 2) {
       return {
