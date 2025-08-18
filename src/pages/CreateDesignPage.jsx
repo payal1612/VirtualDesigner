@@ -510,6 +510,7 @@ const CreateDesignPage = () => {
               currentStep={currentStep}
               calculateArea={calculateArea}
               onDownload3D={handleDownload3DPreview}
+             roomTypes={roomTypes}
             />
           </motion.div>
         </div>
@@ -841,7 +842,7 @@ const Step3Content = ({ wizardData, updateWizardData, roomTypes, dragDropCompone
 };
 
 // Room Preview Component with 3D Download
-const RoomPreview = ({ wizardData, currentStep, calculateArea, onDownload3D }) => {
+const RoomPreview = ({ wizardData, currentStep, calculateArea, onDownload3D, roomTypes }) => {
   const getWallColors = () => {
     if (currentStep === 2) {
       return {
