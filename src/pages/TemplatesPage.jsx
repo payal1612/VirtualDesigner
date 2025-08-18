@@ -27,7 +27,8 @@ import {
   TreePine,
   Car,
   X,
-  Check
+  Check,
+  Baby
 } from 'lucide-react';
 import { useDesignStore } from '../stores/designStore';
 import { useAuthStore } from '../stores/authStore';

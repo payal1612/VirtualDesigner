@@ -9,8 +9,8 @@ export const useDesignStore = create()(
       templates: [
         {
           id: 'template_1',
-          name: 'Modern Living Room',
-          description: 'A contemporary living space with clean lines and minimalist furniture',
+          name: 'Scandinavian Living Room',
+          description: 'Clean, minimalist design with natural wood and neutral tones',
           elements: [
             {
               id: 'wall_1',
@@ -20,7 +20,7 @@ export const useDesignStore = create()(
               width: 300,
               height: 20,
               rotation: 0,
-              color: '#E5E7EB',
+              color: '#F9F5E7',
               name: 'North Wall',
               opacity: 1,
               locked: false
@@ -33,7 +33,7 @@ export const useDesignStore = create()(
               width: 300,
               height: 20,
               rotation: 0,
-              color: '#E5E7EB',
+              color: '#F9F5E7',
               name: 'South Wall',
               opacity: 1,
               locked: false
@@ -46,7 +46,7 @@ export const useDesignStore = create()(
               width: 120,
               height: 60,
               rotation: 0,
-              color: '#8B5CF6',
+              color: '#EDDBC7',
               name: 'Main Sofa',
               opacity: 1,
               locked: false
@@ -59,7 +59,7 @@ export const useDesignStore = create()(
               width: 60,
               height: 40,
               rotation: 0,
-              color: '#92400E',
+              color: '#F8EAD8',
               name: 'Coffee Table',
               opacity: 1,
               locked: false
@@ -82,13 +82,13 @@ export const useDesignStore = create()(
           isTemplate: true,
           createdAt: new Date(),
           updatedAt: new Date(),
-          rating: 4.8,
-          downloads: 342
+          rating: 4.9,
+          downloads: 2847
         },
         {
           id: 'template_2',
-          name: 'Cozy Bedroom',
-          description: 'A warm and inviting bedroom layout with essential furniture',
+          name: 'Modern Master Bedroom',
+          description: 'Luxurious master bedroom with walk-in closet and reading nook',
           elements: [
             {
               id: 'bed_1',
@@ -98,7 +98,7 @@ export const useDesignStore = create()(
               width: 140,
               height: 80,
               rotation: 0,
-              color: '#059669',
+              color: '#A7727D',
               name: 'Queen Bed',
               opacity: 1,
               locked: false
@@ -111,7 +111,7 @@ export const useDesignStore = create()(
               width: 40,
               height: 30,
               rotation: 0,
-              color: '#92400E',
+              color: '#F8EAD8',
               name: 'Nightstand',
               opacity: 1,
               locked: false
@@ -124,7 +124,7 @@ export const useDesignStore = create()(
               width: 80,
               height: 20,
               rotation: 0,
-              color: '#3B82F6',
+              color: '#EDDBC7',
               name: 'Bedroom Window',
               opacity: 1,
               locked: false
@@ -137,8 +137,21 @@ export const useDesignStore = create()(
               width: 80,
               height: 40,
               rotation: 0,
-              color: '#7C2D12',
+              color: '#F8EAD8',
               name: 'Dresser',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'chair_1',
+              type: 'furniture',
+              x: 300,
+              y: 100,
+              width: 50,
+              height: 50,
+              rotation: 0,
+              color: '#EDDBC7',
+              name: 'Reading Chair',
               opacity: 1,
               locked: false
             }
@@ -147,13 +160,13 @@ export const useDesignStore = create()(
           isTemplate: true,
           createdAt: new Date(),
           updatedAt: new Date(),
-          rating: 4.6,
-          downloads: 289
+          rating: 4.8,
+          downloads: 1923
         },
         {
           id: 'template_3',
-          name: 'Minimalist Office',
-          description: 'Clean and productive workspace design for maximum focus',
+          name: 'Home Office Studio',
+          description: 'Professional home office with creative workspace and storage',
           elements: [
             {
               id: 'desk_1',
@@ -163,7 +176,7 @@ export const useDesignStore = create()(
               width: 120,
               height: 60,
               rotation: 0,
-              color: '#7C2D12',
+              color: '#F8EAD8',
               name: 'Work Desk',
               opacity: 1,
               locked: false
@@ -176,7 +189,7 @@ export const useDesignStore = create()(
               width: 50,
               height: 50,
               rotation: 0,
-              color: '#374151',
+              color: '#A7727D',
               name: 'Office Chair',
               opacity: 1,
               locked: false
@@ -202,8 +215,21 @@ export const useDesignStore = create()(
               width: 40,
               height: 120,
               rotation: 0,
-              color: '#92400E',
+              color: '#EDDBC7',
               name: 'Bookshelf',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'storage_1',
+              type: 'furniture',
+              x: 280,
+              y: 80,
+              width: 60,
+              height: 40,
+              rotation: 0,
+              color: '#F8EAD8',
+              name: 'Storage Cabinet',
               opacity: 1,
               locked: false
             }
@@ -212,13 +238,13 @@ export const useDesignStore = create()(
           isTemplate: true,
           createdAt: new Date(),
           updatedAt: new Date(),
-          rating: 4.9,
-          downloads: 156
+          rating: 4.7,
+          downloads: 1456
         },
         {
           id: 'template_4',
-          name: 'Luxury Kitchen',
-          description: 'High-end kitchen with island and premium appliances',
+          name: 'Chef\'s Kitchen',
+          description: 'Professional-grade kitchen with large island and premium appliances',
           elements: [
             {
               id: 'island_1',
@@ -228,7 +254,7 @@ export const useDesignStore = create()(
               width: 120,
               height: 80,
               rotation: 0,
-              color: '#DC2626',
+              color: '#A7727D',
               name: 'Kitchen Island',
               opacity: 1,
               locked: false
@@ -241,7 +267,7 @@ export const useDesignStore = create()(
               width: 200,
               height: 60,
               rotation: 0,
-              color: '#92400E',
+              color: '#F8EAD8',
               name: 'Main Counter',
               opacity: 1,
               locked: false
@@ -254,7 +280,7 @@ export const useDesignStore = create()(
               width: 50,
               height: 40,
               rotation: 0,
-              color: '#6B7280',
+              color: '#EDDBC7',
               name: 'Refrigerator',
               opacity: 1,
               locked: false
@@ -267,7 +293,7 @@ export const useDesignStore = create()(
               width: 60,
               height: 40,
               rotation: 0,
-              color: '#374151',
+              color: '#F8EAD8',
               name: 'Stove',
               opacity: 1,
               locked: false
@@ -277,8 +303,450 @@ export const useDesignStore = create()(
           isTemplate: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          rating: 4.8,
+          downloads: 2103
+        },
+        {
+          id: 'template_5',
+          name: 'Industrial Loft Living',
+          description: 'Urban loft with exposed elements and modern industrial design',
+          elements: [
+            {
+              id: 'sofa_1',
+              type: 'furniture',
+              x: 120,
+              y: 180,
+              width: 140,
+              height: 70,
+              rotation: 0,
+              color: '#A7727D',
+              name: 'Sectional Sofa',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'table_1',
+              type: 'furniture',
+              x: 160,
+              y: 130,
+              width: 80,
+              height: 50,
+              rotation: 0,
+              color: '#F8EAD8',
+              name: 'Industrial Coffee Table',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'bookshelf_1',
+              type: 'furniture',
+              x: 50,
+              y: 80,
+              width: 50,
+              height: 150,
+              rotation: 0,
+              color: '#EDDBC7',
+              name: 'Metal Bookshelf',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'plant_1',
+              type: 'plant',
+              x: 300,
+              y: 200,
+              width: 40,
+              height: 40,
+              rotation: 0,
+              color: '#16A34A',
+              name: 'Large Plant',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'light_1',
+              type: 'light',
+              x: 200,
+              y: 80,
+              width: 30,
+              height: 30,
+              rotation: 0,
+              color: '#F59E0B',
+              name: 'Pendant Light',
+              opacity: 1,
+              locked: false
+            }
+          ],
+          category: 'living',
+          isTemplate: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          rating: 4.6,
+          downloads: 1678
+        },
+        {
+          id: 'template_6',
+          name: 'Cozy Reading Nook',
+          description: 'Perfect corner for reading with comfortable seating and good lighting',
+          elements: [
+            {
+              id: 'chair_1',
+              type: 'furniture',
+              x: 150,
+              y: 150,
+              width: 80,
+              height: 80,
+              rotation: 0,
+              color: '#EDDBC7',
+              name: 'Reading Chair',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'table_1',
+              type: 'furniture',
+              x: 200,
+              y: 180,
+              width: 40,
+              height: 40,
+              rotation: 0,
+              color: '#F8EAD8',
+              name: 'Side Table',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'bookshelf_1',
+              type: 'furniture',
+              x: 100,
+              y: 80,
+              width: 40,
+              height: 120,
+              rotation: 0,
+              color: '#F8EAD8',
+              name: 'Book Storage',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'light_1',
+              type: 'light',
+              x: 180,
+              y: 120,
+              width: 25,
+              height: 25,
+              rotation: 0,
+              color: '#F59E0B',
+              name: 'Reading Lamp',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'plant_1',
+              type: 'plant',
+              x: 250,
+              y: 200,
+              width: 30,
+              height: 30,
+              rotation: 0,
+              color: '#16A34A',
+              name: 'Corner Plant',
+              opacity: 1,
+              locked: false
+            }
+          ],
+          category: 'living',
+          isTemplate: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
           rating: 4.7,
-          downloads: 203
+          downloads: 892
+        },
+        {
+          id: 'template_7',
+          name: 'Modern Bathroom Spa',
+          description: 'Luxurious spa-like bathroom with modern fixtures and clean lines',
+          elements: [
+            {
+              id: 'bathtub_1',
+              type: 'bathroom',
+              x: 100,
+              y: 100,
+              width: 120,
+              height: 60,
+              rotation: 0,
+              color: '#F9F5E7',
+              name: 'Freestanding Tub',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'vanity_1',
+              type: 'bathroom',
+              x: 250,
+              y: 150,
+              width: 80,
+              height: 50,
+              rotation: 0,
+              color: '#EDDBC7',
+              name: 'Double Vanity',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'shower_1',
+              type: 'bathroom',
+              x: 50,
+              y: 200,
+              width: 60,
+              height: 60,
+              rotation: 0,
+              color: '#F8EAD8',
+              name: 'Walk-in Shower',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'plant_1',
+              type: 'plant',
+              x: 300,
+              y: 100,
+              width: 25,
+              height: 25,
+              rotation: 0,
+              color: '#16A34A',
+              name: 'Bathroom Plant',
+              opacity: 1,
+              locked: false
+            }
+          ],
+          category: 'bathroom',
+          isTemplate: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          rating: 4.8,
+          downloads: 1234
+        },
+        {
+          id: 'template_8',
+          name: 'Kids Playroom',
+          description: 'Fun and safe playroom design with storage and play areas',
+          elements: [
+            {
+              id: 'toy_storage_1',
+              type: 'furniture',
+              x: 80,
+              y: 80,
+              width: 100,
+              height: 40,
+              rotation: 0,
+              color: '#EDDBC7',
+              name: 'Toy Storage',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'play_table_1',
+              type: 'furniture',
+              x: 200,
+              y: 150,
+              width: 80,
+              height: 60,
+              rotation: 0,
+              color: '#F8EAD8',
+              name: 'Play Table',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'bookshelf_1',
+              type: 'furniture',
+              x: 50,
+              y: 150,
+              width: 40,
+              height: 80,
+              rotation: 0,
+              color: '#F9F5E7',
+              name: 'Book Shelf',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'chair_1',
+              type: 'furniture',
+              x: 220,
+              y: 220,
+              width: 40,
+              height: 40,
+              rotation: 0,
+              color: '#A7727D',
+              name: 'Kids Chair',
+              opacity: 1,
+              locked: false
+            }
+          ],
+          category: 'child',
+          isTemplate: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          rating: 4.5,
+          downloads: 756
+        },
+        {
+          id: 'template_9',
+          name: 'Dining Room Elegance',
+          description: 'Elegant dining room perfect for entertaining guests',
+          elements: [
+            {
+              id: 'dining_table_1',
+              type: 'furniture',
+              x: 150,
+              y: 150,
+              width: 120,
+              height: 80,
+              rotation: 0,
+              color: '#F8EAD8',
+              name: 'Dining Table',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'chair_1',
+              type: 'furniture',
+              x: 130,
+              y: 120,
+              width: 40,
+              height: 40,
+              rotation: 0,
+              color: '#EDDBC7',
+              name: 'Dining Chair 1',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'chair_2',
+              type: 'furniture',
+              x: 190,
+              y: 120,
+              width: 40,
+              height: 40,
+              rotation: 0,
+              color: '#EDDBC7',
+              name: 'Dining Chair 2',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'cabinet_1',
+              type: 'furniture',
+              x: 80,
+              y: 200,
+              width: 80,
+              height: 50,
+              rotation: 0,
+              color: '#A7727D',
+              name: 'Sideboard',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'light_1',
+              type: 'light',
+              x: 180,
+              y: 100,
+              width: 30,
+              height: 30,
+              rotation: 0,
+              color: '#F59E0B',
+              name: 'Chandelier',
+              opacity: 1,
+              locked: false
+            }
+          ],
+          category: 'dining',
+          isTemplate: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          rating: 4.6,
+          downloads: 1345
+        },
+        {
+          id: 'template_10',
+          name: 'Outdoor Patio Paradise',
+          description: 'Beautiful outdoor living space with seating and dining areas',
+          elements: [
+            {
+              id: 'outdoor_sofa_1',
+              type: 'furniture',
+              x: 100,
+              y: 180,
+              width: 120,
+              height: 60,
+              rotation: 0,
+              color: '#EDDBC7',
+              name: 'Outdoor Sofa',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'outdoor_table_1',
+              type: 'furniture',
+              x: 140,
+              y: 130,
+              width: 60,
+              height: 40,
+              rotation: 0,
+              color: '#F8EAD8',
+              name: 'Coffee Table',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'dining_set_1',
+              type: 'furniture',
+              x: 250,
+              y: 100,
+              width: 80,
+              height: 80,
+              rotation: 0,
+              color: '#A7727D',
+              name: 'Outdoor Dining Set',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'plant_1',
+              type: 'plant',
+              x: 80,
+              y: 100,
+              width: 35,
+              height: 35,
+              rotation: 0,
+              color: '#16A34A',
+              name: 'Outdoor Plant',
+              opacity: 1,
+              locked: false
+            },
+            {
+              id: 'plant_2',
+              type: 'plant',
+              x: 320,
+              y: 200,
+              width: 30,
+              height: 30,
+              rotation: 0,
+              color: '#16A34A',
+              name: 'Corner Plant',
+              opacity: 1,
+              locked: false
+            }
+          ],
+          category: 'outdoor',
+          isTemplate: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          rating: 4.7,
+          downloads: 987
         }
       ],
       selectedElement: null,
