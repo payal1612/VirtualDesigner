@@ -318,39 +318,47 @@ const TemplateCard = ({ template, onUse, onToggleFavorite, isFavorite, delay }) 
       {/* Template Preview */}
       <div className="aspect-video bg-gradient-to-br from-primary-50 to-cream-50 p-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-        {template.elements && template.elements.length > 0 ? (
-          <div className="relative h-full">
-            {template.elements.slice(0, 8).map((element, index) => (
-              <div
-                key={element.id}
-                className="absolute rounded-lg shadow-sm"
-                style={{
-                  left: `${Math.min(Math.max((element.x / 400) * 100, 0), 85)}%`,
-                  top: `${Math.min(Math.max((element.y / 300) * 100, 0), 85)}%`,
-                  width: `${Math.min((element.width / 400) * 100, 20)}%`,
-                  height: `${Math.min((element.height / 300) * 100, 20)}%`,
-                  backgroundColor: element.color,
-                  opacity: 0.8,
-                  transform: `rotate(${element.rotation || 0}deg)`,
-                  zIndex: index
-                }}
-              />
-            ))}
-            {template.elements.length > 8 && (
-              <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm text-primary-700 text-xs font-semibold px-2 py-1 rounded-full">
-                +{template.elements.length - 8} more
-              </div>
-            )}
-          </div>
+        {template.thumbnail ? (
+          <img
+            src={template.thumbnail}
+            alt={template.name}
+            className="w-full h-full object-cover rounded-lg"
+          />
         ) : (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-2">
-                <Home className="h-6 w-6 text-gray-400" />
-              </div>
-              <p className="text-xs text-gray-500">Template preview</p>
+          template.elements && template.elements.length > 0 ? (
+            <div className="relative h-full">
+              {template.elements.slice(0, 8).map((element, index) => (
+                <div
+                  key={element.id}
+                  className="absolute rounded-lg shadow-sm"
+                  style={{
+                    left: `${Math.min(Math.max((element.x / 400) * 100, 0), 85)}%`,
+                    top: `${Math.min(Math.max((element.y / 300) * 100, 0), 85)}%`,
+                    width: `${Math.min((element.width / 400) * 100, 20)}%`,
+                    height: `${Math.min((element.height / 300) * 100, 20)}%`,
+                    backgroundColor: element.color,
+                    opacity: 0.8,
+                    transform: `rotate(${element.rotation || 0}deg)`,
+                    zIndex: index
+                  }}
+                />
+              ))}
+              {template.elements.length > 8 && (
+                <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm text-primary-700 text-xs font-semibold px-2 py-1 rounded-full">
+                  +{template.elements.length - 8} more
+                </div>
+              )}
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <Home className="h-6 w-6 text-gray-400" />
+                </div>
+                <p className="text-xs text-gray-500">Template preview</p>
+              </div>
+            </div>
+          )
         )}
         
         {/* Overlay Actions */}
@@ -427,20 +435,28 @@ const TemplateListItem = ({ template, onUse, onToggleFavorite, isFavorite, isLas
     <div className={`flex items-center p-6 hover:bg-gray-50 transition-colors ${!isLast ? 'border-b border-gray-200' : ''}`}>
       {/* Preview */}
       <div className="w-20 h-16 bg-gradient-to-br from-primary-50 to-cream-50 rounded-lg flex-shrink-0 mr-6 relative overflow-hidden">
-        {template.elements && template.elements.slice(0, 4).map((element, index) => (
-          <div
-            key={element.id}
-            className="absolute rounded-sm"
-            style={{
-              left: `${(element.x / 400) * 100}%`,
-              top: `${(element.y / 300) * 100}%`,
-              width: `${Math.min((element.width / 400) * 100, 30)}%`,
-              height: `${Math.min((element.height / 300) * 100, 30)}%`,
-              backgroundColor: element.color,
-              opacity: 0.7
-            }}
+        {template.thumbnail ? (
+          <img
+            src={template.thumbnail}
+            alt={template.name}
+            className="w-full h-full object-cover"
           />
-        ))}
+        ) : (
+          template.elements && template.elements.slice(0, 4).map((element, index) => (
+            <div
+              key={element.id}
+              className="absolute rounded-sm"
+              style={{
+                left: `${(element.x / 400) * 100}%`,
+                top: `${(element.y / 300) * 100}%`,
+                width: `${Math.min((element.width / 400) * 100, 30)}%`,
+                height: `${Math.min((element.height / 300) * 100, 30)}%`,
+                backgroundColor: element.color,
+                opacity: 0.7
+              }}
+            />
+          ))
+        )}
       </div>
 
       {/* Info */}
