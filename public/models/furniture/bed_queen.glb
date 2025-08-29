@@ -1,0 +1,10 @@
+# This is a placeholder for the Queen Bed 3D model
+# In a real implementation, this would be a binary GLB file
+# The model should include:
+# - Bed frame (separate mesh)
+# - Mattress (separate mesh)
+# - Headboard (separate mesh)
+# - Pillows (separate meshes)
+# - PBR materials: fabric for bedding, wood for frame
+# - Dimensions: ~1.6m wide, 2.0m long, 0.6m high
+# - Optimized for web: <12k polygons

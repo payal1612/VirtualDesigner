@@ -1,0 +1,8 @@
+# This is a placeholder for the Glass Coffee Table 3D model
+# In a real implementation, this would be a binary GLB file
+# The model should include:
+# - Glass top (separate mesh with transparency)
+# - Metal frame (separate mesh)
+# - PBR materials: clear glass with reflections, brushed metal
+# - Dimensions: ~1.2m wide, 0.6m deep, 0.4m high
+# - Optimized for web: <5k polygons

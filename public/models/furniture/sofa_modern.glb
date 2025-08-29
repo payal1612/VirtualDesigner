@@ -1,0 +1,9 @@
+# This is a placeholder for the Modern Sofa 3D model
+# In a real implementation, this would be a binary GLB file
+# The model should include:
+# - Sofa frame (separate mesh)
+# - Cushions (separate meshes for each cushion)
+# - Foldable bed mechanism (separate mesh)
+# - PBR materials: fabric texture for cushions, wood/metal for frame
+# - Dimensions: ~2m wide, 0.8m deep, 0.9m high
+# - Optimized for web: <15k polygons

@@ -1,0 +1,9 @@
+# This is a placeholder for the Tall Bookshelf 3D model
+# In a real implementation, this would be a binary GLB file
+# The model should include:
+# - Main frame (separate mesh)
+# - Shelves (separate meshes for each shelf)
+# - Back panel (separate mesh)
+# - PBR materials: wood texture with grain details
+# - Dimensions: ~0.8m wide, 0.3m deep, 2.0m high
+# - Optimized for web: <6k polygons

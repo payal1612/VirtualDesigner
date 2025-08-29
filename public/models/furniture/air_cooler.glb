@@ -1,0 +1,10 @@
+# This is a placeholder for the Air Cooler 3D model
+# In a real implementation, this would be a binary GLB file
+# The model should include:
+# - Main body (separate mesh)
+# - Fan blades (separate mesh for rotation animation)
+# - Front grill (separate mesh)
+# - Control panel (separate mesh)
+# - PBR materials: plastic body, metal grill, rubber base
+# - Dimensions: ~0.4m wide, 0.3m deep, 1.5m high
+# - Optimized for web: <8k polygons

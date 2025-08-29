@@ -1,0 +1,10 @@
+# This is a placeholder for the Modern Refrigerator 3D model
+# In a real implementation, this would be a binary GLB file
+# The model should include:
+# - Main body (separate mesh)
+# - Doors (separate meshes for animation)
+# - Interior shelves (separate meshes)
+# - Handle (separate mesh)
+# - PBR materials: metallic finish, plastic interior
+# - Dimensions: ~0.6m wide, 0.6m deep, 1.8m high
+# - Optimized for web: <20k polygons

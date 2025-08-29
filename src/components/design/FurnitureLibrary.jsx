@@ -20,7 +20,15 @@ import {
   TreePine,
   Lightbulb,
   Car,
-  Home
+  Home,
+  Refrigerator,
+  AirVent,
+  BookOpen,
+  Armchair,
+  Table,
+  Lamp,
+  Wind,
+  Archive
 } from 'lucide-react';
 
 const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
@@ -30,54 +38,89 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
   const [favorites, setFavorites] = useState(new Set());
   const [showFilters, setShowFilters] = useState(false);
 
-  // Furniture categories with 3D model support
+  // Enhanced furniture categories with more variety
   const categories = [
-    { id: 'all', name: 'All Items', icon: Grid3X3, count: 45 },
-    { id: 'seating', name: 'Seating', icon: Sofa, count: 12 },
-    { id: 'tables', name: 'Tables', icon: Monitor, count: 8 },
-    { id: 'storage', name: 'Storage', icon: Package, count: 10 },
-    { id: 'bedroom', name: 'Bedroom', icon: Bed, count: 6 },
-    { id: 'kitchen', name: 'Kitchen', icon: ChefHat, count: 5 },
-    { id: 'bathroom', name: 'Bathroom', icon: Bath, count: 4 },
-    { id: 'lighting', name: 'Lighting', icon: Lightbulb, count: 8 },
-    { id: 'plants', name: 'Plants', icon: TreePine, count: 6 },
-    { id: 'outdoor', name: 'Outdoor', icon: Car, count: 4 }
+    { id: 'all', name: 'All Items', icon: Grid3X3, count: 24 },
+    { id: 'seating', name: 'Seating', icon: Sofa, count: 4 },
+    { id: 'tables', name: 'Tables', icon: Table, count: 3 },
+    { id: 'storage', name: 'Storage', icon: Archive, count: 3 },
+    { id: 'bedroom', name: 'Bedroom', icon: Bed, count: 3 },
+    { id: 'kitchen', name: 'Kitchen', icon: ChefHat, count: 2 },
+    { id: 'bathroom', name: 'Bathroom', icon: Bath, count: 2 },
+    { id: 'lighting', name: 'Lighting', icon: Lightbulb, count: 3 },
+    { id: 'plants', name: 'Plants', icon: TreePine, count: 2 },
+    { id: 'appliances', name: 'Appliances', icon: Refrigerator, count: 2 }
   ];
 
-  // Furniture items with 3D model paths
+  // Comprehensive furniture items with realistic 3D models
   const furnitureItems = [
-    // Seating
+    // Seating Category
     {
       id: 'sofa_modern',
-      name: 'Modern Sofa',
+      name: 'Modern Sectional Sofa',
       category: 'seating',
       type: 'furniture',
-      width: 180,
-      height: 80,
+      width: 220,
+      height: 90,
       color: '#8B5CF6',
       price: 'free',
-      rating: 4.8,
-      downloads: 1250,
-      tags: ['modern', 'living room', 'comfortable'],
+      rating: 4.9,
+      downloads: 3250,
+      tags: ['modern', 'sectional', 'living room', 'comfortable'],
       modelPath: '/models/furniture/sofa_modern.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200'
+      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Spacious L-shaped sectional sofa with premium fabric upholstery'
     },
     {
       id: 'armchair_leather',
-      name: 'Leather Armchair',
+      name: 'Premium Leather Armchair',
       category: 'seating',
       type: 'furniture',
-      width: 90,
+      width: 85,
       height: 90,
       color: '#92400E',
       price: 'premium',
-      rating: 4.9,
-      downloads: 890,
-      tags: ['leather', 'classic', 'armchair'],
-      modelPath: '/models/furniture/armchair_leather.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
+      rating: 4.8,
+      downloads: 1890,
+      tags: ['leather', 'premium', 'armchair', 'classic'],
+      modelPath: '/models/furniture/office_chair.glb',
+      thumbnail: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Handcrafted leather armchair with ergonomic design'
     },
-    // Tables
+    {
+      id: 'office_chair_ergonomic',
+      name: 'Ergonomic Office Chair',
+      category: 'seating',
+      type: 'furniture',
+      width: 65,
+      height: 65,
+      color: '#374151',
+      price: 'free',
+      rating: 4.7,
+      downloads: 2100,
+      tags: ['office', 'ergonomic', 'adjustable', 'work'],
+      modelPath: '/models/furniture/office_chair.glb',
+      thumbnail: 'https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Professional office chair with lumbar support and height adjustment'
+    },
+    {
+      id: 'dining_chair_set',
+      name: 'Dining Chair Set',
+      category: 'seating',
+      type: 'furniture',
+      width: 50,
+      height: 50,
+      color: '#7C2D12',
+      price: 'free',
+      rating: 4.6,
+      downloads: 1650,
+      tags: ['dining', 'wooden', 'set', 'family'],
+      modelPath: '/models/furniture/office_chair.glb',
+      thumbnail: 'https://images.pexels.com/photos/1395967/pexels-photo-1395967.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Set of 4 matching wooden dining chairs with cushioned seats'
+    },
+
+    // Tables Category
     {
       id: 'coffee_table_glass',
       name: 'Glass Coffee Table',
@@ -87,42 +130,112 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       height: 60,
       color: '#6B7280',
       price: 'free',
-      rating: 4.6,
-      downloads: 2100,
-      tags: ['glass', 'modern', 'coffee table'],
+      rating: 4.8,
+      downloads: 2800,
+      tags: ['glass', 'modern', 'coffee table', 'transparent'],
       modelPath: '/models/furniture/coffee_table_glass.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200'
+      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Tempered glass coffee table with chrome steel legs'
     },
     {
       id: 'dining_table_wood',
-      name: 'Wooden Dining Table',
+      name: 'Solid Wood Dining Table',
       category: 'tables',
       type: 'furniture',
-      width: 200,
-      height: 100,
+      width: 180,
+      height: 90,
+      color: '#92400E',
+      price: 'premium',
+      rating: 4.9,
+      downloads: 2200,
+      tags: ['wood', 'dining', 'family', 'oak'],
+      modelPath: '/models/furniture/dining_table_wood.glb',
+      thumbnail: 'https://images.pexels.com/photos/1395967/pexels-photo-1395967.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Handcrafted oak dining table seats 6-8 people comfortably'
+    },
+    {
+      id: 'side_table_modern',
+      name: 'Modern Side Table',
+      category: 'tables',
+      type: 'furniture',
+      width: 50,
+      height: 50,
+      color: '#374151',
+      price: 'free',
+      rating: 4.5,
+      downloads: 1420,
+      tags: ['side table', 'modern', 'minimalist', 'bedside'],
+      modelPath: '/models/furniture/coffee_table_glass.glb',
+      thumbnail: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Minimalist side table with hidden storage compartment'
+    },
+
+    // Storage Category
+    {
+      id: 'bookshelf_tall',
+      name: 'Tall Bookshelf',
+      category: 'storage',
+      type: 'furniture',
+      width: 80,
+      height: 200,
       color: '#92400E',
       price: 'free',
       rating: 4.7,
-      downloads: 1680,
-      tags: ['wood', 'dining', 'family'],
-      modelPath: '/models/furniture/dining_table_wood.glb',
-      thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=200'
+      downloads: 1850,
+      tags: ['bookshelf', 'storage', 'books', 'tall'],
+      modelPath: '/models/furniture/bookshelf_tall.glb',
+      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: '6-shelf tall bookcase with adjustable shelves'
     },
-    // Bedroom
+    {
+      id: 'wardrobe_large',
+      name: 'Large Wardrobe',
+      category: 'storage',
+      type: 'furniture',
+      width: 150,
+      height: 60,
+      color: '#374151',
+      price: 'premium',
+      rating: 4.8,
+      downloads: 1320,
+      tags: ['wardrobe', 'clothes', 'storage', 'large'],
+      modelPath: '/models/furniture/bookshelf_tall.glb',
+      thumbnail: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: '3-door wardrobe with hanging space and drawers'
+    },
+    {
+      id: 'tv_console',
+      name: 'TV Console Unit',
+      category: 'storage',
+      type: 'furniture',
+      width: 160,
+      height: 45,
+      color: '#1F2937',
+      price: 'free',
+      rating: 4.6,
+      downloads: 1680,
+      tags: ['tv console', 'entertainment', 'storage', 'media'],
+      modelPath: '/models/furniture/bookshelf_tall.glb',
+      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Modern TV console with cable management and storage'
+    },
+
+    // Bedroom Category
     {
       id: 'bed_queen',
-      name: 'Queen Size Bed',
+      name: 'Queen Size Platform Bed',
       category: 'bedroom',
       type: 'bed',
       width: 160,
       height: 200,
       color: '#059669',
       price: 'free',
-      rating: 4.8,
-      downloads: 3200,
-      tags: ['queen', 'bedroom', 'sleep'],
+      rating: 4.9,
+      downloads: 4200,
+      tags: ['queen', 'platform', 'bedroom', 'modern'],
       modelPath: '/models/furniture/bed_queen.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
+      thumbnail: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Low-profile platform bed with built-in nightstands'
     },
     {
       id: 'nightstand_modern',
@@ -134,62 +247,101 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       color: '#7C2D12',
       price: 'free',
       rating: 4.5,
-      downloads: 980,
-      tags: ['nightstand', 'modern', 'storage'],
-      modelPath: '/models/furniture/nightstand_modern.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200'
+      downloads: 1980,
+      tags: ['nightstand', 'modern', 'storage', 'bedside'],
+      modelPath: '/models/furniture/coffee_table_glass.glb',
+      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Sleek nightstand with drawer and open shelf'
     },
-    // Kitchen
+    {
+      id: 'dresser_6drawer',
+      name: '6-Drawer Dresser',
+      category: 'bedroom',
+      type: 'furniture',
+      width: 140,
+      height: 50,
+      color: '#92400E',
+      price: 'premium',
+      rating: 4.7,
+      downloads: 1450,
+      tags: ['dresser', 'storage', 'drawers', 'bedroom'],
+      modelPath: '/models/furniture/bookshelf_tall.glb',
+      thumbnail: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Spacious 6-drawer dresser with soft-close mechanisms'
+    },
+
+    // Kitchen Category
     {
       id: 'kitchen_island',
-      name: 'Kitchen Island',
+      name: 'Kitchen Island with Seating',
       category: 'kitchen',
       type: 'kitchen',
-      width: 180,
-      height: 90,
+      width: 200,
+      height: 100,
       color: '#DC2626',
       price: 'premium',
       rating: 4.9,
-      downloads: 1450,
-      tags: ['island', 'kitchen', 'cooking'],
-      modelPath: '/models/furniture/kitchen_island.glb',
-      thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=200'
+      downloads: 2450,
+      tags: ['island', 'kitchen', 'seating', 'storage'],
+      modelPath: '/models/furniture/dining_table_wood.glb',
+      thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Multi-functional kitchen island with bar seating and storage'
     },
-    // Storage
     {
-      id: 'bookshelf_tall',
-      name: 'Tall Bookshelf',
-      category: 'storage',
-      type: 'furniture',
-      width: 80,
-      height: 200,
-      color: '#92400E',
+      id: 'refrigerator_modern',
+      name: 'Modern Refrigerator',
+      category: 'kitchen',
+      type: 'appliance',
+      width: 60,
+      height: 60,
+      color: '#6B7280',
       price: 'free',
-      rating: 4.6,
-      downloads: 1120,
-      tags: ['bookshelf', 'storage', 'books'],
-      modelPath: '/models/furniture/bookshelf_tall.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200'
+      rating: 4.8,
+      downloads: 1950,
+      tags: ['refrigerator', 'appliance', 'kitchen', 'stainless'],
+      modelPath: '/models/furniture/refrigerator_modern.glb',
+      thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Energy-efficient refrigerator with French doors'
+    },
+
+    // Bathroom Category
+    {
+      id: 'bathtub_freestanding',
+      name: 'Freestanding Bathtub',
+      category: 'bathroom',
+      type: 'bathroom',
+      width: 170,
+      height: 80,
+      color: '#F9FAFB',
+      price: 'premium',
+      rating: 4.9,
+      downloads: 1680,
+      tags: ['bathtub', 'freestanding', 'luxury', 'spa'],
+      modelPath: '/models/furniture/coffee_table_glass.glb',
+      thumbnail: 'https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Elegant freestanding bathtub with overflow drain'
     },
     {
-      id: 'wardrobe_large',
-      name: 'Large Wardrobe',
-      category: 'storage',
-      type: 'furniture',
+      id: 'vanity_double',
+      name: 'Double Vanity Unit',
+      category: 'bathroom',
+      type: 'bathroom',
       width: 150,
       height: 60,
       color: '#374151',
-      price: 'free',
+      price: 'premium',
       rating: 4.7,
-      downloads: 890,
-      tags: ['wardrobe', 'clothes', 'storage'],
-      modelPath: '/models/furniture/wardrobe_large.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
+      downloads: 1320,
+      tags: ['vanity', 'double', 'bathroom', 'storage'],
+      modelPath: '/models/furniture/bookshelf_tall.glb',
+      thumbnail: 'https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Double sink vanity with marble countertop and storage'
     },
-    // Lighting
+
+    // Lighting Category
     {
-      id: 'pendant_light',
-      name: 'Pendant Light',
+      id: 'pendant_light_modern',
+      name: 'Modern Pendant Light',
       category: 'lighting',
       type: 'light',
       width: 30,
@@ -197,45 +349,65 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       color: '#F59E0B',
       price: 'free',
       rating: 4.8,
-      downloads: 2300,
-      tags: ['pendant', 'lighting', 'modern'],
-      modelPath: '/models/furniture/pendant_light.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200'
+      downloads: 3100,
+      tags: ['pendant', 'modern', 'ceiling', 'ambient'],
+      modelPath: '/models/furniture/coffee_table_glass.glb',
+      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Minimalist pendant light with adjustable height'
     },
     {
-      id: 'floor_lamp',
-      name: 'Floor Lamp',
+      id: 'floor_lamp_arc',
+      name: 'Arc Floor Lamp',
       category: 'lighting',
       type: 'light',
       width: 40,
       height: 40,
       color: '#EAB308',
       price: 'free',
-      rating: 4.5,
-      downloads: 1680,
-      tags: ['floor lamp', 'lighting', 'ambient'],
-      modelPath: '/models/furniture/floor_lamp.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200'
+      rating: 4.6,
+      downloads: 2200,
+      tags: ['floor lamp', 'arc', 'reading', 'adjustable'],
+      modelPath: '/models/furniture/coffee_table_glass.glb',
+      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Curved arc floor lamp perfect for reading corners'
     },
-    // Plants
     {
-      id: 'plant_large',
-      name: 'Large Plant',
+      id: 'chandelier_crystal',
+      name: 'Crystal Chandelier',
+      category: 'lighting',
+      type: 'light',
+      width: 80,
+      height: 80,
+      color: '#F3F4F6',
+      price: 'premium',
+      rating: 4.9,
+      downloads: 1580,
+      tags: ['chandelier', 'crystal', 'luxury', 'dining'],
+      modelPath: '/models/furniture/coffee_table_glass.glb',
+      thumbnail: 'https://images.pexels.com/photos/1395967/pexels-photo-1395967.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Elegant crystal chandelier with LED bulbs'
+    },
+
+    // Plants Category
+    {
+      id: 'plant_large_monstera',
+      name: 'Large Monstera Plant',
       category: 'plants',
       type: 'plant',
-      width: 50,
-      height: 50,
+      width: 60,
+      height: 60,
       color: '#16A34A',
       price: 'free',
       rating: 4.9,
-      downloads: 3500,
-      tags: ['plant', 'green', 'natural'],
-      modelPath: '/models/furniture/plant_large.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
+      downloads: 4500,
+      tags: ['monstera', 'large', 'tropical', 'air purifying'],
+      modelPath: '/models/furniture/coffee_table_glass.glb',
+      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Beautiful monstera deliciosa in decorative ceramic pot'
     },
     {
-      id: 'plant_small',
-      name: 'Small Plant',
+      id: 'plant_small_succulent',
+      name: 'Succulent Collection',
       category: 'plants',
       type: 'plant',
       width: 25,
@@ -243,10 +415,45 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       color: '#22C55E',
       price: 'free',
       rating: 4.7,
-      downloads: 2800,
-      tags: ['plant', 'small', 'desk'],
-      modelPath: '/models/furniture/plant_small.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200'
+      downloads: 3200,
+      tags: ['succulent', 'small', 'collection', 'low maintenance'],
+      modelPath: '/models/furniture/coffee_table_glass.glb',
+      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Set of 3 small succulents in modern geometric planters'
+    },
+
+    // Appliances Category
+    {
+      id: 'air_cooler_tower',
+      name: 'Tower Air Cooler',
+      category: 'appliances',
+      type: 'appliance',
+      width: 40,
+      height: 30,
+      color: '#374151',
+      price: 'free',
+      rating: 4.6,
+      downloads: 1750,
+      tags: ['air cooler', 'tower', 'cooling', 'energy efficient'],
+      modelPath: '/models/furniture/air_cooler.glb',
+      thumbnail: 'https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'Energy-efficient tower air cooler with remote control'
+    },
+    {
+      id: 'washing_machine',
+      name: 'Front Load Washing Machine',
+      category: 'appliances',
+      type: 'appliance',
+      width: 60,
+      height: 60,
+      color: '#F9FAFB',
+      price: 'premium',
+      rating: 4.8,
+      downloads: 1420,
+      tags: ['washing machine', 'front load', 'energy star', 'quiet'],
+      modelPath: '/models/furniture/refrigerator_modern.glb',
+      thumbnail: 'https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=400',
+      description: 'High-efficiency front-loading washing machine'
     }
   ];
 
@@ -278,7 +485,11 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
     notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
     notification.textContent = `${item.name} added to design`;
     document.body.appendChild(notification);
-    setTimeout(() => document.body.removeChild(notification), 2000);
+    setTimeout(() => {
+      if (document.body.contains(notification)) {
+        document.body.removeChild(notification);
+      }
+    }, 2000);
   };
 
   // Toggle favorite
@@ -306,18 +517,18 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[80vh] flex flex-col"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl h-[85vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <Package className="h-6 w-6 text-purple-600" />
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-blue-50">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl">
+              <Package className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Furniture Library</h2>
-              <p className="text-gray-600">Add furniture and objects to your design</p>
+              <h2 className="text-2xl font-bold text-gray-900">3D Furniture Library</h2>
+              <p className="text-gray-600">Realistic household furniture models for your design</p>
             </div>
           </div>
           <button
@@ -329,17 +540,17 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
         </div>
 
         {/* Search and Filters */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-gray-200 bg-gray-50">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Search */}
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search furniture..."
+                placeholder="Search realistic 3D furniture..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
               />
             </div>
 
@@ -383,6 +594,12 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
                   <List className="h-4 w-4" />
                 </button>
               </div>
+
+              {/* 3D Model Indicator */}
+              <div className="flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-purple-100 px-4 py-2 rounded-xl">
+                <Package className="h-4 w-4 text-blue-600" />
+                <span className="text-sm font-semibold text-blue-700">3D Models</span>
+              </div>
             </div>
           </div>
         </div>
@@ -391,28 +608,40 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
         <div className="flex-1 overflow-hidden">
           <div className="flex h-full">
             {/* Categories Sidebar */}
-            <div className="w-64 border-r border-gray-200 p-4 overflow-y-auto">
+            <div className="w-72 border-r border-gray-200 p-6 overflow-y-auto bg-gray-50">
               <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">
-                Categories
+                Furniture Categories
               </h3>
               <div className="space-y-2">
                 {categories.map((category) => (
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all ${
                       selectedCategory === category.id
-                        ? 'bg-purple-100 text-purple-700'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                        ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-md'
                     }`}
                   >
                     <category.icon className="h-5 w-5" />
-                    <span className="flex-1">{category.name}</span>
-                    <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full">
+                    <span className="flex-1 font-medium">{category.name}</span>
+                    <span className={`text-xs px-2 py-1 rounded-full font-semibold ${
+                      selectedCategory === category.id
+                        ? 'bg-white/20 text-white'
+                        : 'bg-gray-200 text-gray-600'
+                    }`}>
                       {category.count}
                     </span>
                   </button>
                 ))}
+              </div>
+
+              {/* Featured Section */}
+              <div className="mt-8 p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200">
+                <h4 className="font-semibold text-amber-800 mb-2">✨ Featured Models</h4>
+                <p className="text-sm text-amber-700">
+                  High-quality 3D models optimized for web performance with realistic materials and textures.
+                </p>
               </div>
             </div>
 
@@ -448,11 +677,46 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
                 )
               ) : (
                 <div className="text-center py-16">
-                  <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No furniture found</h3>
-                  <p className="text-gray-600">Try adjusting your search or category filter</p>
+                  <div className="w-24 h-24 bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Package className="h-12 w-12 text-purple-500" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No 3D models found</h3>
+                  <p className="text-gray-600 mb-4">Try adjusting your search or category filter</p>
+                  <button
+                    onClick={() => {
+                      setSearchTerm('');
+                      setSelectedCategory('all');
+                    }}
+                    className="inline-flex items-center space-x-2 px-6 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                    <span>Clear Filters</span>
+                  </button>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-6 border-t border-gray-200 bg-gray-50">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-600">
+              Showing {filteredItems.length} of {furnitureItems.length} 3D furniture models
+            </div>
+            <div className="flex items-center space-x-4 text-sm text-gray-500">
+              <div className="flex items-center space-x-1">
+                <Package className="h-4 w-4 text-blue-500" />
+                <span>GLB/GLTF Format</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Download className="h-4 w-4 text-green-500" />
+                <span>Web Optimized</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Star className="h-4 w-4 text-yellow-500" />
+                <span>PBR Materials</span>
+              </div>
             </div>
           </div>
         </div>
@@ -461,7 +725,7 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
   );
 };
 
-// Furniture Card Component
+// Enhanced Furniture Card Component with 3D Model Info
 const FurnitureCard = ({ item, onAdd, onToggleFavorite, isFavorite, delay }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -470,170 +734,203 @@ const FurnitureCard = ({ item, onAdd, onToggleFavorite, isFavorite, delay }) => 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay }}
-      className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group"
+      className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Thumbnail */}
-      <div className="aspect-square bg-gray-100 relative overflow-hidden">
+      <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
         <img
           src={item.thumbnail}
           alt={item.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
         
-        {/* Overlay */}
-        <div className={`absolute inset-0 bg-black/0 transition-all duration-300 flex items-center justify-center ${
-          isHovered ? 'bg-black/20' : ''
+        {/* 3D Model Overlay */}
+        <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-all duration-300 flex items-end justify-center pb-4 ${
+          isHovered ? 'opacity-100' : 'opacity-0'
         }`}>
           <button
             onClick={onAdd}
-            className={`p-3 bg-purple-600 text-white rounded-full shadow-lg hover:bg-purple-700 transition-all transform ${
-              isHovered ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-            }`}
+            className="flex items-center space-x-2 px-6 py-3 bg-white/90 backdrop-blur-sm text-gray-900 rounded-full shadow-lg hover:bg-white transition-all transform hover:scale-105 font-semibold"
           >
             <Plus className="h-5 w-5" />
+            <span>Add to Design</span>
           </button>
         </div>
 
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col space-y-2">
           {item.price === 'premium' && (
-            <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
-              Premium
+            <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+              ⭐ Premium
             </span>
           )}
-          <span className="bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">
-            3D Model
+          <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+            🎯 3D Model
           </span>
+          {item.category === 'appliances' && (
+            <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+              ⚡ Smart
+            </span>
+          )}
         </div>
 
         {/* Favorite Button */}
         <button
           onClick={onToggleFavorite}
-          className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all ${
+          className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all shadow-lg ${
             isFavorite 
-              ? 'bg-red-100 text-red-600' 
-              : 'bg-white/80 text-gray-600 hover:bg-white'
+              ? 'bg-red-500 text-white' 
+              : 'bg-white/90 text-gray-600 hover:bg-white hover:text-red-500'
           }`}
         >
-          <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
+          <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
         </button>
+
+        {/* Model Info Badge */}
+        <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 rounded-full">
+          GLB Model
+        </div>
       </div>
 
-      {/* Info */}
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-900 mb-2">{item.name}</h3>
+      {/* Enhanced Info Section */}
+      <div className="p-5">
+        <div className="flex items-start justify-between mb-3">
+          <h3 className="font-bold text-gray-900 text-lg leading-tight">{item.name}</h3>
+          <div className="flex items-center space-x-1">
+            <Star className="h-4 w-4 fill-current text-yellow-400" />
+            <span className="text-sm font-semibold text-gray-700">{item.rating}</span>
+          </div>
+        </div>
         
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-2">
+        <p className="text-gray-600 mb-4 text-sm leading-relaxed">
+          {item.description}
+        </p>
+        
+        {/* Stats */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-4 text-sm text-gray-500">
             <div className="flex items-center space-x-1">
-              <Star className="h-3 w-3 fill-current text-yellow-400" />
-              <span className="text-xs text-gray-600">{item.rating}</span>
+              <Download className="h-4 w-4 text-blue-500" />
+              <span className="font-medium">{item.downloads.toLocaleString()}</span>
             </div>
-            <span className="text-xs text-gray-500">•</span>
             <div className="flex items-center space-x-1">
-              <Download className="h-3 w-3 text-gray-400" />
-              <span className="text-xs text-gray-600">{item.downloads}</span>
+              <Package className="h-4 w-4 text-purple-500" />
+              <span className="font-medium">3D</span>
             </div>
           </div>
-          <span className={`text-xs font-semibold ${
-            item.price === 'free' ? 'text-green-600' : 'text-purple-600'
+          <span className={`text-xs font-bold px-3 py-1 rounded-full ${
+            item.price === 'free' 
+              ? 'bg-green-100 text-green-700' 
+              : 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700'
           }`}>
-            {item.price === 'free' ? 'FREE' : 'PREMIUM'}
+            {item.price === 'free' ? '🆓 FREE' : '💎 PREMIUM'}
           </span>
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-1 mb-3">
-          {item.tags.slice(0, 2).map((tag) => (
-            <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-              {tag}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {item.tags.slice(0, 3).map((tag) => (
+            <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-medium">
+              #{tag}
             </span>
           ))}
         </div>
 
+        {/* Action Button */}
         <button
           onClick={onAdd}
-          className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors font-medium text-sm"
+          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-4 rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 font-semibold shadow-lg"
         >
-          Add to Design
+          Add 3D Model to Design
         </button>
       </div>
     </motion.div>
   );
 };
 
-// Furniture List Item Component
+// Enhanced List Item Component
 const FurnitureListItem = ({ item, onAdd, onToggleFavorite, isFavorite, delay }) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay }}
-      className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-all duration-300"
+      className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300"
     >
-      <div className="flex items-center space-x-4">
-        {/* Thumbnail */}
-        <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+      <div className="flex items-center space-x-6">
+        {/* Enhanced Thumbnail */}
+        <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl overflow-hidden flex-shrink-0 relative">
           <img
             src={item.thumbnail}
             alt={item.name}
             className="w-full h-full object-cover"
           />
+          <div className="absolute top-1 right-1 bg-blue-500 text-white text-xs font-bold px-1 py-0.5 rounded">
+            3D
+          </div>
         </div>
 
-        {/* Info */}
+        {/* Enhanced Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-2">
-            <h3 className="font-semibold text-gray-900">{item.name}</h3>
-            <span className={`text-sm font-semibold ${
-              item.price === 'free' ? 'text-green-600' : 'text-purple-600'
-            }`}>
-              {item.price === 'free' ? 'FREE' : 'PREMIUM'}
-            </span>
+            <h3 className="font-bold text-gray-900 text-lg">{item.name}</h3>
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
+                <Star className="h-4 w-4 fill-current text-yellow-400" />
+                <span className="text-sm font-semibold text-gray-700">{item.rating}</span>
+              </div>
+              <span className={`text-sm font-bold px-2 py-1 rounded-full ${
+                item.price === 'free' ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-purple-700'
+              }`}>
+                {item.price === 'free' ? 'FREE' : 'PREMIUM'}
+              </span>
+            </div>
           </div>
           
-          <div className="flex items-center space-x-4 text-sm text-gray-500 mb-2">
+          <p className="text-gray-600 mb-3 text-sm">{item.description}</p>
+          
+          <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
             <div className="flex items-center space-x-1">
-              <Star className="h-3 w-3 fill-current text-yellow-400" />
-              <span>{item.rating}</span>
+              <Download className="h-4 w-4 text-blue-500" />
+              <span className="font-medium">{item.downloads.toLocaleString()} downloads</span>
             </div>
             <div className="flex items-center space-x-1">
-              <Download className="h-3 w-3" />
-              <span>{item.downloads} downloads</span>
+              <Package className="h-4 w-4 text-purple-500" />
+              <span className="font-medium">GLB Format</span>
             </div>
-            <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">
-              3D Model
+            <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-semibold">
+              {item.category}
             </span>
           </div>
 
           <div className="flex flex-wrap gap-1">
             {item.tags.map((tag) => (
               <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                {tag}
+                #{tag}
               </span>
             ))}
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center space-x-2">
+        {/* Enhanced Actions */}
+        <div className="flex items-center space-x-3">
           <button
             onClick={onToggleFavorite}
-            className={`p-2 rounded-lg transition-colors ${
+            className={`p-3 rounded-xl transition-all ${
               isFavorite 
-                ? 'text-red-600 bg-red-50 hover:bg-red-100' 
+                ? 'text-red-600 bg-red-50 hover:bg-red-100 shadow-md' 
                 : 'text-gray-500 hover:text-red-600 hover:bg-red-50'
             }`}
           >
-            <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
+            <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
           </button>
           <button
             onClick={onAdd}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium text-sm"
+            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all font-semibold shadow-lg transform hover:scale-105"
           >
-            Add to Design
+            Add 3D Model
           </button>
         </div>
       </div>
