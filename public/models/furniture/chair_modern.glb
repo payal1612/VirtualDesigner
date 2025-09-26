@@ -1,0 +1,17 @@
+# Modern Office Chair - GLB 3D Model
+# This is a placeholder for the actual GLB binary file
+#
+# Model Specifications:
+# - Dimensions: 0.65m x 0.65m x 1.2m (W x D x H)
+# - Polygons: ~8,000 triangles (web optimized)
+# - Materials: Leather/fabric seat, metal base
+# - Separate Meshes:
+#   * Chair_Seat (upholstered seat)
+#   * Chair_Backrest (ergonomic back support)
+#   * Chair_Armrests (adjustable armrests)
+#   * Chair_Base (5-star metal base)
+#   * Chair_Wheels (5 caster wheels)
+# - Textures: Leather/fabric, brushed metal
+# - Features: Realistic stitching, metal reflections
+# - Animation Ready: Height adjustment, swivel rotation
+# - File Size: ~1.5-2MB compressed

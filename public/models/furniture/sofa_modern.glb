@@ -1,9 +1,22 @@
-# This is a placeholder for the Modern Sofa 3D model
-# In a real implementation, this would be a binary GLB file
-# The model should include:
-# - Sofa frame (separate mesh)
-# - Cushions (separate meshes for each cushion)
-# - Foldable bed mechanism (separate mesh)
-# - PBR materials: fabric texture for cushions, wood/metal for frame
-# - Dimensions: ~2m wide, 0.8m deep, 0.9m high
-# - Optimized for web: <15k polygons
+# Modern Sectional Sofa - GLB 3D Model
+# This is a placeholder for the actual GLB binary file
+# 
+# Model Specifications:
+# - Dimensions: 2.2m x 0.9m x 0.8m (L x W x H)
+# - Polygons: ~15,000 triangles (optimized for web)
+# - Materials: PBR fabric texture with normal maps
+# - Separate Meshes:
+#   * Sofa_Frame (wooden/metal frame)
+#   * Sofa_Cushions_Seat (removable seat cushions)
+#   * Sofa_Cushions_Back (back cushions)
+#   * Sofa_Legs (metal/wooden legs)
+# - Textures: 2K resolution fabric, wood, metal
+# - Features: Realistic fabric wrinkles, proper UV mapping
+# - Animation Ready: Cushions can be animated separately
+# - File Size: ~2-3MB compressed
+#
+# In production, this would be a binary GLB file containing:
+# - Mesh geometry data
+# - PBR material definitions
+# - Texture maps (diffuse, normal, roughness, metallic)
+# - Scene hierarchy and transforms

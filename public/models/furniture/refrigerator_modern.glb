@@ -1,10 +1,17 @@
-# This is a placeholder for the Modern Refrigerator 3D model
-# In a real implementation, this would be a binary GLB file
-# The model should include:
-# - Main body (separate mesh)
-# - Doors (separate meshes for animation)
-# - Interior shelves (separate meshes)
-# - Handle (separate mesh)
-# - PBR materials: metallic finish, plastic interior
-# - Dimensions: ~0.6m wide, 0.6m deep, 1.8m high
-# - Optimized for web: <20k polygons
+# Modern Refrigerator - GLB 3D Model
+# This is a placeholder for the actual GLB binary file
+#
+# Model Specifications:
+# - Dimensions: 0.6m x 0.6m x 1.8m (W x D x H)
+# - Polygons: ~10,000 triangles (web optimized)
+# - Materials: Stainless steel, plastic interior
+# - Separate Meshes:
+#   * Fridge_Body (main stainless steel body)
+#   * Fridge_Door_Upper (freezer door)
+#   * Fridge_Door_Lower (main compartment door)
+#   * Fridge_Handles (door handles)
+#   * Fridge_Interior (shelves and compartments)
+# - Textures: Brushed steel, plastic, glass shelves
+# - Features: Realistic metal reflections, door seals
+# - Animation Ready: Doors can open/close
+# - File Size: ~2-2.5MB compressed
