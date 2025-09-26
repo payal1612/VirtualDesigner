@@ -3,45 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import SceneCanvas from '../threeD/SceneCanvas';
 import { Sofa, Chair, Bed, Table } from '../threeD/Furniture';
-import { 
-  Plus, 
-  FolderOpen, 
-  Layout, 
-  Camera, 
-  Settings, 
-  User,
-  ArrowRight,
-  Sparkles,
-  TrendingUp,
-  Clock,
-  Star,
-  BarChart3,
-  Target,
-  Zap,
-  Heart,
-  Share2,
-  Download,
-  Edit,
-  Eye,
-  Calendar,
-  Award,
-  Users,
-  Palette,
-  Grid3X3,
-  Search,
-  Filter,
-  Bell,
-  BookOpen,
-  Lightbulb,
-  Rocket,
-  ChevronRight,
-  Activity,
-  PieChart,
-  TrendingDown,
-  CheckSquare,
-  Layers,
-  X
-} from 'lucide-react';
+import { Plus, FolderOpen, LayoutGrid as Layout, Camera, Settings, User, ArrowRight, Sparkles, TrendingUp, Clock, Star, BarChart3, Target, Zap, Heart, Share2, Download, CreditCard as Edit, Eye, Calendar, Award, Users, Palette, Grid3x3 as Grid3X3, Search, Filter, Bell, BookOpen, Lightbulb, Rocket, ChevronRight, Activity, PieChart, TrendingDown, CheckSquare, Layers, X } from 'lucide-react';
 import { useDesignStore } from '../stores/designStore';
 import { useAuthStore } from '../stores/authStore';
 
