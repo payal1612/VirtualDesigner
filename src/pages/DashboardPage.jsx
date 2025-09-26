@@ -1,9 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import SceneCanvas from '../threeD/SceneCanvas';
-import { Sofa, Chair, Bed, Table } from '../threeD/Furniture';
-import { Plus, FolderOpen, LayoutGrid as Layout, Camera, Settings, User, ArrowRight, Sparkles, TrendingUp, Clock, Star, BarChart3, Target, Zap, Heart, Share2, Download, CreditCard as Edit, Eye, Calendar, Award, Users, Palette, Grid3x3 as Grid3X3, Search, Filter, Bell, BookOpen, Lightbulb, Rocket, ChevronRight, Activity, PieChart, TrendingDown, CheckSquare, Layers, X } from 'lucide-react';
+import { 
+  Plus, 
+  FolderOpen, 
+  Layout, 
+  Camera, 
+  Settings, 
+  User,
+  ArrowRight,
+  Sparkles,
+  TrendingUp,
+  Clock,
+  Star,
+  BarChart3,
+  Target,
+  Zap,
+  Heart,
+  Share2,
+  Download,
+  Edit,
+  Eye,
+  Calendar,
+  Award,
+  Users,
+  Palette,
+  Grid3X3,
+  Search,
+  Filter,
+  Bell,
+  BookOpen,
+  Lightbulb,
+  Rocket,
+  ChevronRight,
+  Activity,
+  PieChart,
+  TrendingDown,
+  CheckSquare,
+  Layers,
+  X
+} from 'lucide-react';
 import { useDesignStore } from '../stores/designStore';
 import { useAuthStore } from '../stores/authStore';
 
@@ -11,8 +47,6 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const { savedDesigns, templates, getDesignStats } = useDesignStore();
   const { user, isAuthenticated } = useAuthStore();
-  const [furnitureData, setFurnitureData] = useState([]);
-  const [loading3D, setLoading3D] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [recentActivity, setRecentActivity] = useState([]);
   const [quickStats, setQuickStats] = useState({});
@@ -30,30 +64,6 @@ const DashboardPage = () => {
       navigate('/');
     }
   }, [isAuthenticated, navigate]);
-
-  // Fetch furniture data from API
-  useEffect(() => {
-    const fetchFurniture = async () => {
-      try {
-        const response = await fetch('/api/furniture?limit=4');
-        const data = await response.json();
-        setFurnitureData(data);
-      } catch (error) {
-        console.error('Error fetching furniture:', error);
-        // Fallback to local data
-        setFurnitureData([
-          { id: 1, name: "Modern Sofa", modelUrl: "/models/furniture/sofa_modern.glb", category: "seating" },
-          { id: 2, name: "Office Chair", modelUrl: "/models/furniture/chair_modern.glb", category: "seating" },
-          { id: 3, name: "Queen Bed", modelUrl: "/models/furniture/bed_queen.glb", category: "bedroom" },
-          { id: 4, name: "Dining Table", modelUrl: "/models/furniture/table_dining.glb", category: "tables" }
-        ]);
-      } finally {
-        setLoading3D(false);
-      }
-    };
-
-    fetchFurniture();
-  }, []);
 
   const dashboardCards = [
     {
@@ -369,7 +379,7 @@ const DashboardPage = () => {
               {/* Recent Activity & Learning */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <RecentActivityCard activities={recentActivity} />
-                <Furniture3DPreviewCard furnitureData={furnitureData} loading={loading3D} />
+                <LearningResourcesCard resources={learningResources} />
               </div>
             </motion.div>
           )}
@@ -522,85 +532,6 @@ const RecentActivityCard = ({ activities }) => (
     )}
   </div>
 );
-
-const Furniture3DPreviewCard = ({ furnitureData, loading }) => {
-  const [selectedFurniture, setSelectedFurniture] = useState(0);
-
-  const furnitureComponents = {
-    seating: furnitureData.find(f => f.category === 'seating') ? Sofa : null,
-    bedroom: furnitureData.find(f => f.category === 'bedroom') ? Bed : null,
-    tables: furnitureData.find(f => f.category === 'tables') ? Table : null,
-  };
-
-  return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center space-x-2">
-        <Package className="h-5 w-5 text-primary-600" />
-        <span>3D Furniture Preview</span>
-      </h3>
-      
-      {loading ? (
-        <div className="h-64 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading 3D Models...</p>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="h-64 mb-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl overflow-hidden">
-            <SceneCanvas
-              cameraPosition={[5, 5, 5]}
-              showGrid={false}
-              showShadows={true}
-              lightingMode="day"
-              environmentPreset="apartment"
-              enableControls={true}
-            >
-              {furnitureData.slice(0, 3).map((furniture, index) => {
-                const FurnitureComponent = index === 0 ? Sofa : index === 1 ? Chair : Bed;
-                return (
-                  <FurnitureComponent
-                    key={furniture.id}
-                    position={[index * 2 - 2, 0, 0]}
-                    scale={[0.8, 0.8, 0.8]}
-                    rotation={[0, Math.PI / 4, 0]}
-                    isSelected={selectedFurniture === index}
-                    onSelect={() => setSelectedFurniture(index)}
-                  />
-                );
-              })}
-            </SceneCanvas>
-          </div>
-          
-          <div className="space-y-2">
-            {furnitureData.slice(0, 3).map((furniture, index) => (
-              <button
-                key={furniture.id}
-                onClick={() => setSelectedFurniture(index)}
-                className={`w-full text-left p-3 rounded-lg transition-colors ${
-                  selectedFurniture === index
-                    ? 'bg-primary-50 text-primary-700 border border-primary-200'
-                    : 'hover:bg-gray-50'
-                }`}
-              >
-                <div className="font-medium">{furniture.name}</div>
-                <div className="text-sm text-gray-500 capitalize">{furniture.category}</div>
-              </button>
-            ))}
-          </div>
-          
-          <Link
-            to="/create"
-            className="block text-center text-primary-600 hover:text-primary-700 font-medium text-sm mt-4"
-          >
-            Start designing with 3D furniture →
-          </Link>
-        </>
-      )}
-    </div>
-  );
-};
 
 const LearningResourcesCard = ({ resources }) => (
   <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">

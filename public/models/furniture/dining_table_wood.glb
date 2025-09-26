@@ -1,8 +1,0 @@
-# This is a placeholder for the Wooden Dining Table 3D model
-# In a real implementation, this would be a binary GLB file
-# The model should include:
-# - Table top (separate mesh with wood texture)
-# - Legs (separate meshes, metallic material)
-# - PBR materials: polished wood surface, brushed metal legs
-# - Dimensions: ~1.8m wide, 0.9m deep, 0.75m high
-# - Optimized for web: <10k polygons

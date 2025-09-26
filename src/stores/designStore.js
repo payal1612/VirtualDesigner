@@ -11,7 +11,6 @@ export const useDesignStore = create()(
           id: 'template_1',
           name: 'Scandinavian Living Room',
           description: 'Clean, minimalist design with natural wood and neutral tones',
-          thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'wall_1',
@@ -90,7 +89,6 @@ export const useDesignStore = create()(
           id: 'template_2',
           name: 'Modern Master Bedroom',
           description: 'Luxurious master bedroom with walk-in closet and reading nook',
-          thumbnail: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'bed_1',
@@ -169,7 +167,6 @@ export const useDesignStore = create()(
           id: 'template_3',
           name: 'Home Office Studio',
           description: 'Professional home office with creative workspace and storage',
-          thumbnail: 'https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'desk_1',
@@ -248,7 +245,6 @@ export const useDesignStore = create()(
           id: 'template_4',
           name: 'Chef\'s Kitchen',
           description: 'Professional-grade kitchen with large island and premium appliances',
-          thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'island_1',
@@ -314,7 +310,6 @@ export const useDesignStore = create()(
           id: 'template_5',
           name: 'Industrial Loft Living',
           description: 'Urban loft with exposed elements and modern industrial design',
-          thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'sofa_1',
@@ -393,7 +388,6 @@ export const useDesignStore = create()(
           id: 'template_6',
           name: 'Cozy Reading Nook',
           description: 'Perfect corner for reading with comfortable seating and good lighting',
-          thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'chair_1',
@@ -472,7 +466,6 @@ export const useDesignStore = create()(
           id: 'template_7',
           name: 'Modern Bathroom Spa',
           description: 'Luxurious spa-like bathroom with modern fixtures and clean lines',
-          thumbnail: 'https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'bathtub_1',
@@ -538,7 +531,6 @@ export const useDesignStore = create()(
           id: 'template_8',
           name: 'Kids Playroom',
           description: 'Fun and safe playroom design with storage and play areas',
-          thumbnail: 'https://images.pexels.com/photos/6444/pencil-crayon-color-colorful.jpg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'toy_storage_1',
@@ -604,7 +596,6 @@ export const useDesignStore = create()(
           id: 'template_9',
           name: 'Dining Room Elegance',
           description: 'Elegant dining room perfect for entertaining guests',
-          thumbnail: 'https://images.pexels.com/photos/1395967/pexels-photo-1395967.jpeg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'dining_table_1',
@@ -683,7 +674,6 @@ export const useDesignStore = create()(
           id: 'template_10',
           name: 'Outdoor Patio Paradise',
           description: 'Beautiful outdoor living space with seating and dining areas',
-          thumbnail: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=400',
           elements: [
             {
               id: 'outdoor_sofa_1',
