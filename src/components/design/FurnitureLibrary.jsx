@@ -1,27 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Search, 
-  Filter, 
-  Grid3X3, 
-  List, 
-  Download,
-  Star,
-  Heart,
-  Plus,
-  X,
-  ChevronDown,
-  Package,
-  Sofa,
-  Bed,
-  ChefHat,
-  Monitor,
-  Bath,
-  TreePine,
-  Lightbulb,
-  Car,
-  Home
-} from 'lucide-react';
+import { Search, Filter, Grid3x3 as Grid3X3, List, Download, Star, Heart, Plus, X, ChevronDown, Package, Sofa, Bed, ChefHat, Monitor, Bath, TreePine, Lightbulb, Car, Home } from 'lucide-react';
 
 const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
   const [searchTerm, setSearchTerm] = useState('');
