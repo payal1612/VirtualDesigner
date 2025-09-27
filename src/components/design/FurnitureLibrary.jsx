@@ -32,26 +32,23 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
 
   // Furniture categories with 3D model support
   const categories = [
-    { id: 'all', name: 'All Items', icon: Grid3X3, count: 45 },
-    { id: 'seating', name: 'Seating', icon: Sofa, count: 12 },
-    { id: 'tables', name: 'Tables', icon: Monitor, count: 8 },
-    { id: 'storage', name: 'Storage', icon: Package, count: 10 },
-    { id: 'bedroom', name: 'Bedroom', icon: Bed, count: 6 },
-    { id: 'kitchen', name: 'Kitchen', icon: ChefHat, count: 5 },
-    { id: 'bathroom', name: 'Bathroom', icon: Bath, count: 4 },
-    { id: 'lighting', name: 'Lighting', icon: Lightbulb, count: 8 },
-    { id: 'plants', name: 'Plants', icon: TreePine, count: 6 },
-    { id: 'outdoor', name: 'Outdoor', icon: Car, count: 4 }
+    { id: 'all', name: 'All Items', icon: Grid3X3, count: furnitureItems.length },
+    { id: 'seating', name: 'Seating', icon: Sofa, count: furnitureItems.filter(item => item.category === 'seating').length },
+    { id: 'tables', name: 'Tables', icon: Monitor, count: furnitureItems.filter(item => item.category === 'tables').length },
+    { id: 'bedroom', name: 'Bedroom', icon: Bed, count: furnitureItems.filter(item => item.category === 'bedroom').length },
+    { id: 'kitchen', name: 'Kitchen', icon: ChefHat, count: furnitureItems.filter(item => item.category === 'kitchen').length },
+    { id: 'appliances', name: 'Appliances', icon: Package, count: furnitureItems.filter(item => item.category === 'appliances').length }
   ];
 
   // Furniture items with 3D model paths
   const furnitureItems = [
     // Seating
     {
-      id: 'sofa_modern',
+      id: 'sofa',
       name: 'Modern Sofa',
       category: 'seating',
       type: 'furniture',
+      furnitureType: 'sofa',
       width: 180,
       height: 80,
       color: '#8B5CF6',
@@ -59,61 +56,49 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       rating: 4.8,
       downloads: 1250,
       tags: ['modern', 'living room', 'comfortable'],
-      modelPath: '/models/furniture/sofa_modern.glb',
+      modelPath: '/src/threeD/models/sofa.glb',
       thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200'
     },
     {
-      id: 'armchair_leather',
-      name: 'Leather Armchair',
+      id: 'chair',
+      name: 'Modern Chair',
       category: 'seating',
       type: 'furniture',
+      furnitureType: 'chair',
       width: 90,
       height: 90,
       color: '#92400E',
       price: 'premium',
       rating: 4.9,
       downloads: 890,
-      tags: ['leather', 'classic', 'armchair'],
-      modelPath: '/models/furniture/armchair_leather.glb',
+      tags: ['modern', 'office', 'chair'],
+      modelPath: '/src/threeD/models/chair.glb',
       thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
     },
     // Tables
     {
-      id: 'coffee_table_glass',
-      name: 'Glass Coffee Table',
+      id: 'table',
+      name: 'Dining Table',
       category: 'tables',
       type: 'furniture',
+      furnitureType: 'table',
       width: 120,
       height: 60,
       color: '#6B7280',
       price: 'free',
       rating: 4.6,
       downloads: 2100,
-      tags: ['glass', 'modern', 'coffee table'],
-      modelPath: '/models/furniture/coffee_table_glass.glb',
+      tags: ['wood', 'dining', 'table'],
+      modelPath: '/src/threeD/models/table.glb',
       thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200'
-    },
-    {
-      id: 'dining_table_wood',
-      name: 'Wooden Dining Table',
-      category: 'tables',
-      type: 'furniture',
-      width: 200,
-      height: 100,
-      color: '#92400E',
-      price: 'free',
-      rating: 4.7,
-      downloads: 1680,
-      tags: ['wood', 'dining', 'family'],
-      modelPath: '/models/furniture/dining_table_wood.glb',
-      thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=200'
     },
     // Bedroom
     {
-      id: 'bed_queen',
+      id: 'bed',
       name: 'Queen Size Bed',
       category: 'bedroom',
       type: 'bed',
+      furnitureType: 'bed',
       width: 160,
       height: 200,
       color: '#059669',
@@ -121,132 +106,42 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       rating: 4.8,
       downloads: 3200,
       tags: ['queen', 'bedroom', 'sleep'],
-      modelPath: '/models/furniture/bed_queen.glb',
+      modelPath: '/src/threeD/models/bed.glb',
       thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
-    },
-    {
-      id: 'nightstand_modern',
-      name: 'Modern Nightstand',
-      category: 'bedroom',
-      type: 'furniture',
-      width: 50,
-      height: 40,
-      color: '#7C2D12',
-      price: 'free',
-      rating: 4.5,
-      downloads: 980,
-      tags: ['nightstand', 'modern', 'storage'],
-      modelPath: '/models/furniture/nightstand_modern.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200'
     },
     // Kitchen
     {
-      id: 'kitchen_island',
-      name: 'Kitchen Island',
+      id: 'refrigerator',
+      name: 'Modern Refrigerator',
       category: 'kitchen',
-      type: 'kitchen',
-      width: 180,
-      height: 90,
-      color: '#DC2626',
+      type: 'appliance',
+      furnitureType: 'refrigerator',
+      width: 60,
+      height: 180,
+      color: '#FFFFFF',
       price: 'premium',
       rating: 4.9,
       downloads: 1450,
-      tags: ['island', 'kitchen', 'cooking'],
-      modelPath: '/models/furniture/kitchen_island.glb',
+      tags: ['refrigerator', 'kitchen', 'appliance'],
+      modelPath: '/src/threeD/models/refrigerator.glb',
       thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=200'
     },
-    // Storage
+    // Appliances
     {
-      id: 'bookshelf_tall',
-      name: 'Tall Bookshelf',
-      category: 'storage',
-      type: 'furniture',
-      width: 80,
-      height: 200,
-      color: '#92400E',
+      id: 'air_cooler',
+      name: 'Tower Air Cooler',
+      category: 'appliances',
+      type: 'appliance',
+      furnitureType: 'air_cooler',
+      width: 50,
+      height: 150,
+      color: '#6B7280',
       price: 'free',
       rating: 4.6,
       downloads: 1120,
-      tags: ['bookshelf', 'storage', 'books'],
-      modelPath: '/models/furniture/bookshelf_tall.glb',
+      tags: ['air cooler', 'cooling', 'appliance'],
+      modelPath: '/src/threeD/models/air_cooler.glb',
       thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200'
-    },
-    {
-      id: 'wardrobe_large',
-      name: 'Large Wardrobe',
-      category: 'storage',
-      type: 'furniture',
-      width: 150,
-      height: 60,
-      color: '#374151',
-      price: 'free',
-      rating: 4.7,
-      downloads: 890,
-      tags: ['wardrobe', 'clothes', 'storage'],
-      modelPath: '/models/furniture/wardrobe_large.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
-    },
-    // Lighting
-    {
-      id: 'pendant_light',
-      name: 'Pendant Light',
-      category: 'lighting',
-      type: 'light',
-      width: 30,
-      height: 30,
-      color: '#F59E0B',
-      price: 'free',
-      rating: 4.8,
-      downloads: 2300,
-      tags: ['pendant', 'lighting', 'modern'],
-      modelPath: '/models/furniture/pendant_light.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200'
-    },
-    {
-      id: 'floor_lamp',
-      name: 'Floor Lamp',
-      category: 'lighting',
-      type: 'light',
-      width: 40,
-      height: 40,
-      color: '#EAB308',
-      price: 'free',
-      rating: 4.5,
-      downloads: 1680,
-      tags: ['floor lamp', 'lighting', 'ambient'],
-      modelPath: '/models/furniture/floor_lamp.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200'
-    },
-    // Plants
-    {
-      id: 'plant_large',
-      name: 'Large Plant',
-      category: 'plants',
-      type: 'plant',
-      width: 50,
-      height: 50,
-      color: '#16A34A',
-      price: 'free',
-      rating: 4.9,
-      downloads: 3500,
-      tags: ['plant', 'green', 'natural'],
-      modelPath: '/models/furniture/plant_large.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
-    },
-    {
-      id: 'plant_small',
-      name: 'Small Plant',
-      category: 'plants',
-      type: 'plant',
-      width: 25,
-      height: 25,
-      color: '#22C55E',
-      price: 'free',
-      rating: 4.7,
-      downloads: 2800,
-      tags: ['plant', 'small', 'desk'],
-      modelPath: '/models/furniture/plant_small.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200'
     }
   ];
 
@@ -268,7 +163,8 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       rotation: 0,
       opacity: 1,
       locked: false,
-      zIndex: Date.now()
+      zIndex: Date.now(),
+      furnitureType: item.furnitureType || item.type
     };
     
     onAddElement(newElement);

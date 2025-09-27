@@ -1,19 +1,4 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { 
-  OrbitControls, 
-  Environment, 
-  Grid, 
-  Text3D, 
-  Center,
-  Bounds,
-  ContactShadows,
-  Sky,
-  Stars,
-  PerspectiveCamera,
-  Html,
-  useProgress
-} from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { 
   RotateCcw, 
@@ -38,7 +23,8 @@ import {
   Layers,
   Palette
 } from 'lucide-react';
-import * as THREE from 'three';
+import SceneCanvas from '../../threeD/SceneCanvas';
+import { Sofa, Chair, Bed, Table, Refrigerator, AirCooler } from '../../threeD/Furniture';
 
 const Canvas3D = ({ 
   design, 
@@ -77,95 +63,53 @@ const Canvas3D = ({
     };
   };
 
+  // Render 3D furniture based on type
+  const render3DFurniture = (element) => {
+    const element3D = convertTo3D(element);
+    const commonProps = {
+      key: element.id,
+      position: [element3D.x, element3D.y, element3D.z],
+      rotation: [0, (element.rotation || 0) * Math.PI / 180, 0],
+      scale: [element3D.width, 1, element3D.height],
+      color: element.color,
+      isSelected: selectedElement?.id === element.id,
+      onSelect: () => onElementSelect(element.id)
+    };
+
+    switch (element.furnitureType || element.type) {
+      case 'sofa':
+        return <Sofa {...commonProps} />;
+      case 'chair':
+        return <Chair {...commonProps} />;
+      case 'bed':
+        return <Bed {...commonProps} />;
+      case 'table':
+        return <Table {...commonProps} />;
+      case 'refrigerator':
+        return <Refrigerator {...commonProps} />;
+      case 'air_cooler':
+        return <AirCooler {...commonProps} />;
+      default:
+        return <Element3D {...commonProps} element={element3D} />;
+    }
+  };
+
   return (
     <div className="relative w-full h-full bg-gradient-to-b from-blue-50 to-blue-100">
       {/* 3D Canvas */}
-      <Canvas
-        shadows={showShadows}
-        camera={{ position: cameraPosition, fov: 60 }}
-        gl={{ 
-          antialias: renderQuality !== 'low',
-          powerPreference: "high-performance"
-        }}
+      <SceneCanvas
+        cameraPosition={cameraPosition}
+        lightingMode={lightingMode}
+        showGrid={showGrid}
+        showShadows={showShadows}
+        environmentPreset={environmentPreset}
       >
-        <Suspense fallback={<LoadingFallback />}>
-          {/* Camera Controls */}
-          <OrbitControls
-            ref={controlsRef}
-            enablePan={true}
-            enableZoom={true}
-            enableRotate={true}
-            minDistance={5}
-            maxDistance={50}
-            maxPolarAngle={Math.PI / 2}
-          />
-
-          {/* Lighting Setup */}
-          <LightingSetup mode={lightingMode} />
-
-          {/* Environment */}
-          <Environment preset={environmentPreset} />
-          
-          {/* Sky */}
-          {lightingMode === 'day' && <Sky sunPosition={[100, 20, 100]} />}
-          {lightingMode === 'night' && <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />}
-
-          {/* Grid */}
-          {showGrid && (
-            <Grid
-              args={[20, 20]}
-              cellSize={1}
-              cellThickness={0.5}
-              cellColor="#6b7280"
-              sectionSize={5}
-              sectionThickness={1}
-              sectionColor="#374151"
-              fadeDistance={25}
-              fadeStrength={1}
-              followCamera={false}
-              infiniteGrid={true}
-            />
-          )}
-
-          {/* Ground Plane */}
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
-            <planeGeometry args={[50, 50]} />
-            <meshStandardMaterial color="#f3f4f6" />
-          </mesh>
-
-          {/* Contact Shadows */}
-          {showShadows && (
-            <ContactShadows
-              position={[0, 0, 0]}
-              opacity={0.4}
-              scale={20}
-              blur={1}
-              far={10}
-              resolution={256}
-              color="#000000"
-            />
-          )}
-
-          {/* 3D Elements */}
-          <Bounds fit clip observe margin={1.2}>
-            {design?.elements?.map((element) => {
-              const element3D = convertTo3D(element);
-              return (
-                <Element3D
-                  key={element.id}
-                  element={element3D}
-                  isSelected={selectedElement?.id === element.id}
-                  onSelect={() => onElementSelect(element.id)}
-                  onUpdate={onElementUpdate}
-                />
-              );
-            })}
-          </Bounds>
-
-          {/* Room Boundaries */}
-          <RoomBoundaries design={design} />
-        </Suspense>
-      </Canvas>
+        {/* Render 3D Furniture */}
+        {design?.elements?.map((element) => render3DFurniture(element))}
+        
+        {/* Room Boundaries */}
+        <RoomBoundaries design={design} />
+      </SceneCanvas>
 
       {/* 3D Controls */}
       <Canvas3DControls
@@ -194,7 +138,7 @@ const Canvas3D = ({
 };
 
 // 3D Element Component
-const Element3D = ({ element, isSelected, onSelect, onUpdate }) => {
+const Element3D = ({ element, isSelected, onSelect, onUpdate, position, rotation, scale, color }) => {
   const meshRef = useRef();
   const [hovered, setHovered] = useState(false);
 
@@ -267,7 +211,7 @@ const Element3D = ({ element, isSelected, onSelect, onUpdate }) => {
 
       {/* Element Label */}
       {(isSelected || hovered) && (
-        <Html position={[0, 2, 0]} center>
+        <Html position={[0, element.height + 1, 0]} center>
           <div className="bg-white px-2 py-1 rounded shadow-lg text-xs font-medium text-gray-800 pointer-events-none">
             {element.name}
           </div>
@@ -286,44 +230,6 @@ const Element3D = ({ element, isSelected, onSelect, onUpdate }) => {
         />
       )}
     </group>
-  );
-};
-
-// Lighting Setup Component
-const LightingSetup = ({ mode }) => {
-  return (
-    <>
-      <ambientLight intensity={mode === 'day' ? 0.6 : 0.2} />
-      <directionalLight
-        position={[10, 10, 5]}
-        intensity={mode === 'day' ? 1 : 0.3}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-far={50}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
-      />
-      <directionalLight
-        position={[-5, 5, -5]}
-        intensity={mode === 'day' ? 0.3 : 0.1}
-      />
-
-      {mode === 'night' && (
-        <>
-          <pointLight position={[0, 5, 0]} intensity={0.5} color="#ffffff" />
-          <spotLight
-            position={[5, 8, 5]}
-            angle={0.3}
-            penumbra={1}
-            intensity={0.5}
-            castShadow
-          />
-        </>
-      )}
-    </>
   );
 };
 
@@ -358,21 +264,6 @@ const RoomBoundaries = ({ design }) => {
         );
       })}
     </group>
-  );
-};
-
-// Loading Fallback Component
-const LoadingFallback = () => {
-  const { progress } = useProgress();
-  
-  return (
-    <Html center>
-      <div className="flex flex-col items-center space-y-4">
-        <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"></div>
-        <div className="text-gray-600 font-medium">Loading 3D Scene...</div>
-        <div className="text-sm text-gray-500">{Math.round(progress)}% loaded</div>
-      </div>
-    </Html>
   );
 };
 
