@@ -9,16 +9,6 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
   const [favorites, setFavorites] = useState(new Set());
   const [showFilters, setShowFilters] = useState(false);
 
-  // Furniture categories with 3D model support
-  const categories = [
-    { id: 'all', name: 'All Items', icon: Grid3X3, count: furnitureItems.length },
-    { id: 'seating', name: 'Seating', icon: Sofa, count: furnitureItems.filter(item => item.category === 'seating').length },
-    { id: 'tables', name: 'Tables', icon: Monitor, count: furnitureItems.filter(item => item.category === 'tables').length },
-    { id: 'bedroom', name: 'Bedroom', icon: Bed, count: furnitureItems.filter(item => item.category === 'bedroom').length },
-    { id: 'kitchen', name: 'Kitchen', icon: ChefHat, count: furnitureItems.filter(item => item.category === 'kitchen').length },
-    { id: 'appliances', name: 'Appliances', icon: Package, count: furnitureItems.filter(item => item.category === 'appliances').length }
-  ];
-
   // Furniture items with 3D model paths
   const furnitureItems = [
     // Seating
@@ -122,6 +112,16 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       modelPath: '/src/threeD/models/air_cooler.glb',
       thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200'
     }
+  ];
+
+  // Furniture categories with 3D model support
+  const categories = [
+    { id: 'all', name: 'All Items', icon: Grid3X3, count: furnitureItems.length },
+    { id: 'seating', name: 'Seating', icon: Sofa, count: furnitureItems.filter(item => item.category === 'seating').length },
+    { id: 'tables', name: 'Tables', icon: Monitor, count: furnitureItems.filter(item => item.category === 'tables').length },
+    { id: 'bedroom', name: 'Bedroom', icon: Bed, count: furnitureItems.filter(item => item.category === 'bedroom').length },
+    { id: 'kitchen', name: 'Kitchen', icon: ChefHat, count: furnitureItems.filter(item => item.category === 'kitchen').length },
+    { id: 'appliances', name: 'Appliances', icon: Package, count: furnitureItems.filter(item => item.category === 'appliances').length }
   ];
 
   // Filter furniture items
