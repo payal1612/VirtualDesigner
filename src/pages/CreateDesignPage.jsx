@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight, RotateCw, FlipHorizontal, FlipVertical, Square, Circle, Triangle, Hexagon, Pentagon, Edit, Home, ChefHat, Bed, Monitor, Bath, Baby, Shuffle, Check, Ruler, Grid3X3, Plus, Save, Eye, Layers, Camera, Download, Share2, Settings, Palette, Move, RotateCcw, ZoomIn, ZoomOut, Sofa, TreePine, Lightbulb, Package, CircleDot as DragHandleDots2, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, RotateCw, FlipHorizontal, FlipVertical, Square, Circle, Triangle, Hexagon, Pentagon, CreditCard as Edit, Home, ChefHat, Bed, Monitor, Bath, Baby, Shuffle, Check, Ruler, Grid3x3 as Grid3X3, Plus, Save, Eye, Layers, Camera, Download, Share2, Settings, Palette, Move, RotateCcw, ZoomIn, ZoomOut, Sofa, TreePine, Lightbulb, Package, CircleDot as DragHandleDots2, X } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDesignStore } from '../stores/designStore';
 import { useAuthStore } from '../stores/authStore';
