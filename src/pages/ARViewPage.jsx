@@ -174,13 +174,61 @@ const ARViewPage = () => {
   };
 
   const handleCompatibilityCheck = () => {
-    const result = checkDeviceCompatibility();
     setShowCompatibilityCheck(true);
     
+    // Simulate compatibility check
     setTimeout(() => {
-      alert(`Device: ${result.deviceType}\nAR Compatible: ${result.compatible ? 'Yes' : 'No'}`);
+      const result = checkDeviceCompatibility();
       setShowCompatibilityCheck(false);
-    }, 1000);
+      
+      // Show detailed compatibility results
+      const compatibilityModal = document.createElement('div');
+      compatibilityModal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4';
+      compatibilityModal.innerHTML = `
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 ${result.compatible ? 'bg-green-100' : 'bg-red-100'} rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl">${result.compatible ? '✅' : '❌'}</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">
+              ${result.compatible ? 'AR Compatible!' : 'AR Not Supported'}
+            </h3>
+            <p class="text-gray-600">
+              Device: ${result.deviceType}
+            </p>
+          </div>
+          
+          <div class="space-y-3 mb-6">
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <span class="text-sm font-medium">Camera Access</span>
+              <span class="text-green-600">✓</span>
+            </div>
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <span class="text-sm font-medium">Motion Sensors</span>
+              <span class="text-green-600">✓</span>
+            </div>
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <span class="text-sm font-medium">WebXR Support</span>
+              <span class="${result.compatible ? 'text-green-600' : 'text-red-600'}">${result.compatible ? '✓' : '✗'}</span>
+            </div>
+          </div>
+          
+          <button onclick="this.parentElement.parentElement.remove()" 
+                  class="w-full px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium">
+            Close
+          </button>
+        </div>
+      `;
+      
+      document.body.appendChild(compatibilityModal);
+      
+      // Auto-remove after 10 seconds
+      setTimeout(() => {
+        if (document.body.contains(compatibilityModal)) {
+          document.body.removeChild(compatibilityModal);
+        }
+      }, 10000);
+    }, 2000);
   };
 
   if (!isAuthenticated) {

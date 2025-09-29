@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import SceneCanvas from '../../threeD/SceneCanvas';
 import { Sofa, Chair, Bed, Table, Refrigerator, AirCooler } from '../../threeD/Furniture';
+import { Html } from '@react-three/drei';
 
 const Canvas3D = ({ 
   design, 
@@ -73,9 +74,11 @@ const Canvas3D = ({
       scale: [element3D.width, 1, element3D.height],
       color: element.color,
       isSelected: selectedElement?.id === element.id,
-      onSelect: () => onElementSelect(element.id)
+      onSelect: () => onElementSelect(element.id),
+      furnitureType: element.furnitureType || element.type
     };
 
+    // Import furniture components dynamically
     switch (element.furnitureType || element.type) {
       case 'sofa':
         return <Sofa {...commonProps} />;
@@ -89,6 +92,19 @@ const Canvas3D = ({
         return <Refrigerator {...commonProps} />;
       case 'air_cooler':
         return <AirCooler {...commonProps} />;
+      case 'furniture':
+        // Determine furniture type based on name or default to sofa
+        if (element.name?.toLowerCase().includes('chair')) {
+          return <Chair {...commonProps} />;
+        } else if (element.name?.toLowerCase().includes('table')) {
+          return <Table {...commonProps} />;
+        } else {
+          return <Sofa {...commonProps} />;
+        }
+      case 'plant':
+        return <Element3D {...commonProps} element={element3D} />;
+      case 'light':
+        return <Element3D {...commonProps} element={element3D} />;
       default:
         return <Element3D {...commonProps} element={element3D} />;
     }

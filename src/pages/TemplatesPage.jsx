@@ -119,6 +119,21 @@ const TemplatesPage = () => {
     setFavorites(newFavorites);
   };
 
+  // Get template image based on category
+  const getTemplateImage = (category) => {
+    const templateImages = {
+      living: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400',
+      bedroom: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=400',
+      kitchen: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=400',
+      office: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=400',
+      bathroom: 'https://images.pexels.com/photos/1571461/pexels-photo-1571461.jpeg?auto=compress&cs=tinysrgb&w=400',
+      dining: 'https://images.pexels.com/photos/1571467/pexels-photo-1571467.jpeg?auto=compress&cs=tinysrgb&w=400',
+      child: 'https://images.pexels.com/photos/1571470/pexels-photo-1571470.jpeg?auto=compress&cs=tinysrgb&w=400',
+      outdoor: 'https://images.pexels.com/photos/1571471/pexels-photo-1571471.jpeg?auto=compress&cs=tinysrgb&w=400'
+    };
+    return templateImages[category] || templateImages.living;
+  };
+
   const showNotification = (message, type = 'info') => {
     const notification = document.createElement('div');
     const colors = {
@@ -317,41 +332,21 @@ const TemplateCard = ({ template, onUse, onToggleFavorite, isFavorite, delay }) 
     >
       {/* Template Preview */}
       <div className="aspect-video bg-gradient-to-br from-primary-50 to-cream-50 p-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-        {template.elements && template.elements.length > 0 ? (
-          <div className="relative h-full">
-            {template.elements.slice(0, 8).map((element, index) => (
-              <div
-                key={element.id}
-                className="absolute rounded-lg shadow-sm"
-                style={{
-                  left: `${Math.min(Math.max((element.x / 400) * 100, 0), 85)}%`,
-                  top: `${Math.min(Math.max((element.y / 300) * 100, 0), 85)}%`,
-                  width: `${Math.min((element.width / 400) * 100, 20)}%`,
-                  height: `${Math.min((element.height / 300) * 100, 20)}%`,
-                  backgroundColor: element.color,
-                  opacity: 0.8,
-                  transform: `rotate(${element.rotation || 0}deg)`,
-                  zIndex: index
-                }}
-              />
-            ))}
-            {template.elements.length > 8 && (
-              <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm text-primary-700 text-xs font-semibold px-2 py-1 rounded-full">
-                +{template.elements.length - 8} more
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-2">
-                <Home className="h-6 w-6 text-gray-400" />
-              </div>
-              <p className="text-xs text-gray-500">Template preview</p>
+        {/* Template Image */}
+        <img
+          src={getTemplateImage(template.category)}
+          alt={template.name}
+          className="w-full h-full object-cover rounded-lg"
+        />
+        
+        {/* Overlay with elements preview */}
+        <div className="absolute inset-0 bg-black/20 rounded-lg">
+          {template.elements && template.elements.length > 0 && (
+            <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm text-primary-700 text-xs font-semibold px-2 py-1 rounded-full">
+              {template.elements.length} items
             </div>
-          </div>
-        )}
+          )}
+        </div>
         
         {/* Overlay Actions */}
         <div className={`absolute inset-0 bg-black/20 flex items-center justify-center transition-all duration-300 ${
@@ -434,11 +429,11 @@ const TemplateListItem = ({ template, onUse, onToggleFavorite, isFavorite, isLas
             style={{
               left: `${(element.x / 400) * 100}%`,
               top: `${(element.y / 300) * 100}%`,
-              width: `${Math.min((element.width / 400) * 100, 30)}%`,
-              height: `${Math.min((element.height / 300) * 100, 30)}%`,
-              backgroundColor: element.color,
-              opacity: 0.7
-            }}
+        <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+          <img
+            src={getTemplateImage(item.category)}
+            alt={item.name}
+            className="w-full h-full object-cover"
           />
         ))}
       </div>

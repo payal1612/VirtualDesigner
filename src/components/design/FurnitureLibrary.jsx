@@ -26,7 +26,8 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       downloads: 1250,
       tags: ['modern', 'living room', 'comfortable'],
       modelPath: '/src/threeD/models/sofa.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200'
+      thumbnail: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=200',
+      preview3D: true
     },
     {
       id: 'chair',
@@ -42,7 +43,8 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       downloads: 890,
       tags: ['modern', 'office', 'chair'],
       modelPath: '/src/threeD/models/chair.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
+      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200',
+      preview3D: true
     },
     // Tables
     {
@@ -59,7 +61,8 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       downloads: 2100,
       tags: ['wood', 'dining', 'table'],
       modelPath: '/src/threeD/models/table.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200'
+      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200',
+      preview3D: true
     },
     // Bedroom
     {
@@ -76,7 +79,8 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       downloads: 3200,
       tags: ['queen', 'bedroom', 'sleep'],
       modelPath: '/src/threeD/models/bed.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200'
+      thumbnail: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=200',
+      preview3D: true
     },
     // Kitchen
     {
@@ -93,7 +97,8 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       downloads: 1450,
       tags: ['refrigerator', 'kitchen', 'appliance'],
       modelPath: '/src/threeD/models/refrigerator.glb',
-      thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=200'
+      thumbnail: 'https://images.pexels.com/photos/2029667/pexels-photo-2029667.jpeg?auto=compress&cs=tinysrgb&w=200',
+      preview3D: true
     },
     // Appliances
     {
@@ -110,7 +115,8 @@ const FurnitureLibrary = ({ onAddElement, isOpen, onClose }) => {
       downloads: 1120,
       tags: ['air cooler', 'cooling', 'appliance'],
       modelPath: '/src/threeD/models/air_cooler.glb',
-      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200'
+      thumbnail: 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=200',
+      preview3D: true
     }
   ];
 
@@ -381,6 +387,11 @@ const FurnitureCard = ({ item, onAdd, onToggleFavorite, isFavorite, delay }) => 
           <span className="bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">
             3D Model
           </span>
+          {item.preview3D && (
+            <span className="bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+              Realistic 3D
+            </span>
+          )}
         </div>
 
         {/* Favorite Button */}
