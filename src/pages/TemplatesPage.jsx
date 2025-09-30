@@ -131,7 +131,7 @@ const TemplatesPage = () => {
                         </div>
                       )}
                       <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
-                        {template.elements} elements
+                        {template.elements.length} elements
                       </div>
                     </div>
                     <div className="p-4">
@@ -176,7 +176,7 @@ const TemplatesPage = () => {
                           )}
                         </div>
                         <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
-                          <span>{template.elements} elements</span>
+                          <span>{template.elements.length} elements</span>
                           <div className="flex items-center space-x-1">
                             <Star className="w-4 h-4 text-yellow-400 fill-current" />
                             <span>{template.rating}</span>
