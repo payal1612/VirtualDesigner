@@ -7,77 +7,15 @@ import { Search, Filter, Grid2x2 as Grid, List, Star, Eye, Download } from 'luci
 const TemplatesPage = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { createDesign } = useDesignStore();
+  const { templates, loadDesign } = useDesignStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
 
-  const templates = [
-    {
-      id: 1,
-      name: 'Modern Living Room',
-      category: 'living-room',
-      image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400',
-      elements: 12,
-      rating: 4.8,
-      downloads: 1250,
-      premium: false
-    },
-    {
-      id: 2,
-      name: 'Cozy Bedroom',
-      category: 'bedroom',
-      image: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=400',
-      elements: 8,
-      rating: 4.6,
-      downloads: 980,
-      premium: false
-    },
-    {
-      id: 3,
-      name: 'Minimalist Kitchen',
-      category: 'kitchen',
-      image: 'https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=400',
-      elements: 15,
-      rating: 4.9,
-      downloads: 1580,
-      premium: true
-    },
-    {
-      id: 4,
-      name: 'Home Office',
-      category: 'office',
-      image: 'https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=400',
-      elements: 10,
-      rating: 4.7,
-      downloads: 750,
-      premium: false
-    },
-    {
-      id: 5,
-      name: 'Luxury Bathroom',
-      category: 'bathroom',
-      image: 'https://images.pexels.com/photos/1454804/pexels-photo-1454804.jpeg?auto=compress&cs=tinysrgb&w=400',
-      elements: 6,
-      rating: 4.5,
-      downloads: 620,
-      premium: true
-    },
-    {
-      id: 6,
-      name: 'Elegant Dining Room',
-      category: 'dining',
-      image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=400',
-      elements: 9,
-      rating: 4.8,
-      downloads: 890,
-      premium: false
-    }
-  ];
 
   const categories = [
     { id: 'all', name: 'All Templates', count: templates.length },
-    { id: 'living-room', name: 'Living Room', count: templates.filter(t => t.category === 'living-room').length },
+    { id: 'living', name: 'Living Room', count: templates.filter(t => t.category === 'living').length },
     { id: 'bedroom', name: 'Bedroom', count: templates.filter(t => t.category === 'bedroom').length },
     { id: 'kitchen', name: 'Kitchen', count: templates.filter(t => t.category === 'kitchen').length },
     { id: 'office', name: 'Office', count: templates.filter(t => t.category === 'office').length },
@@ -97,13 +35,8 @@ const TemplatesPage = () => {
       return;
     }
 
-    const newDesign = createDesign({
-      name: `${template.name} - Copy`,
-      type: template.category,
-      templateId: template.id
-    });
-
-    navigate(`/create/${newDesign.id}`);
+    loadDesign(template);
+    navigate('/create');
   };
 
   return (
