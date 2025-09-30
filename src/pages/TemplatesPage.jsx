@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDesignStore } from '../stores/designStore';
 import { useAuthStore } from '../stores/authStore';
-import { Search, Filter, Grid, List, Star, Eye, Download } from 'lucide-react';
+import { Search, Filter, Grid2x2 as Grid, List, Star, Eye, Download } from 'lucide-react';
 
 const TemplatesPage = () => {
   const navigate = useNavigate();
