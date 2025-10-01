@@ -111,6 +111,9 @@ const FurnitureLoader = ({
         );
 
       case 'chair':
+      case 'armchair':
+      case 'dining_chair':
+      case 'office_chair':
         return (
           <group>
             {/* Chair seat */}
@@ -142,7 +145,167 @@ const FurnitureLoader = ({
           </group>
         );
 
+      case 'recliner':
+        return (
+          <group>
+            {/* Recliner seat */}
+            <mesh position={[0, 0.4, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.8, 0.15, 0.8]} />
+              <primitive object={materials.leather} />
+            </mesh>
+            {/* Recliner back */}
+            <mesh position={[0, 0.9, -0.3]} castShadow receiveShadow>
+              <boxGeometry args={[0.8, 1.0, 0.15]} />
+              <primitive object={materials.leather} />
+            </mesh>
+            {/* Footrest */}
+            <mesh position={[0, 0.2, 0.6]} castShadow receiveShadow>
+              <boxGeometry args={[0.7, 0.1, 0.5]} />
+              <primitive object={materials.leather} />
+            </mesh>
+            {/* Armrests */}
+            <mesh position={[-0.5, 0.7, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.15, 0.6, 0.8]} />
+              <primitive object={materials.leather} />
+            </mesh>
+            <mesh position={[0.5, 0.7, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.15, 0.6, 0.8]} />
+              <primitive object={materials.leather} />
+            </mesh>
+          </group>
+        );
+
+      case 'loveseat':
+        return (
+          <group>
+            {/* Loveseat base */}
+            <mesh position={[0, 0.3, 0]} castShadow receiveShadow>
+              <boxGeometry args={[1.4, 0.4, 0.8]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+            {/* Loveseat back */}
+            <mesh position={[0, 0.7, -0.3]} castShadow receiveShadow>
+              <boxGeometry args={[1.4, 0.8, 0.15]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+            {/* Armrests */}
+            <mesh position={[-0.6, 0.6, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.2, 0.6, 0.8]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+            <mesh position={[0.6, 0.6, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.2, 0.6, 0.8]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+          </group>
+        );
+
+      case 'bench':
+        return (
+          <group>
+            {/* Bench seat */}
+            <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
+              <boxGeometry args={[1.2, 0.08, 0.4]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Bench legs */}
+            {[[-0.5, 0.225, -0.15], [0.5, 0.225, -0.15], [-0.5, 0.225, 0.15], [0.5, 0.225, 0.15]].map((pos, i) => (
+              <mesh key={i} position={pos} castShadow receiveShadow>
+                <boxGeometry args={[0.08, 0.45, 0.08]} />
+                <primitive object={materials.wood} />
+              </mesh>
+            ))}
+          </group>
+        );
+
+      case 'stool':
+      case 'bar_stool':
+        return (
+          <group>
+            {/* Stool seat */}
+            <mesh position={[0, 0.75, 0]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.2, 0.2, 0.05]} />
+              <primitive object={materials.leather} />
+            </mesh>
+            {/* Stool leg */}
+            <mesh position={[0, 0.375, 0]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.03, 0.03, 0.75]} />
+              <primitive object={materials.metal} />
+            </mesh>
+            {/* Base */}
+            <mesh position={[0, 0.05, 0]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.25, 0.25, 0.1]} />
+              <primitive object={materials.metal} />
+            </mesh>
+          </group>
+        );
+
+      case 'bean_bag':
+        return (
+          <group>
+            {/* Bean bag body */}
+            <mesh position={[0, 0.4, 0]} castShadow receiveShadow>
+              <sphereGeometry args={[0.6, 16, 12]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+          </group>
+        );
+
+      case 'sectional_sofa':
+        return (
+          <group>
+            {/* Main section */}
+            <mesh position={[0, 0.3, 0]} castShadow receiveShadow>
+              <boxGeometry args={[2.0, 0.5, 0.9]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+            {/* Corner section */}
+            <mesh position={[1.5, 0.3, 0.8]} castShadow receiveShadow>
+              <boxGeometry args={[1.0, 0.5, 0.9]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+            {/* Back cushions */}
+            <mesh position={[0, 0.8, -0.35]} castShadow receiveShadow>
+              <boxGeometry args={[2.0, 0.9, 0.2]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+            <mesh position={[1.5, 0.8, 0.45]} castShadow receiveShadow>
+              <boxGeometry args={[1.0, 0.9, 0.2]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+          </group>
+        );
+
+      case 'rocking_chair':
+        return (
+          <group>
+            {/* Chair seat */}
+            <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.5, 0.08, 0.5]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Chair back */}
+            <mesh position={[0, 0.9, -0.2]} castShadow receiveShadow>
+              <boxGeometry args={[0.5, 0.9, 0.08]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Rockers */}
+            <mesh position={[0, 0.1, 0]} castShadow receiveShadow>
+              <torusGeometry args={[0.4, 0.03, 8, 16, Math.PI]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Chair legs */}
+            {[[-0.2, 0.225, -0.2], [0.2, 0.225, -0.2], [-0.2, 0.225, 0.2], [0.2, 0.225, 0.2]].map((pos, i) => (
+              <mesh key={i} position={pos} castShadow receiveShadow>
+                <boxGeometry args={[0.05, 0.45, 0.05]} />
+                <primitive object={materials.wood} />
+              </mesh>
+            ))}
+          </group>
+        );
+
       case 'bed':
+      case 'bed_frame':
         return (
           <group>
             {/* Mattress */}
@@ -172,7 +335,107 @@ const FurnitureLoader = ({
           </group>
         );
 
+      case 'mattress':
+        return (
+          <group>
+            {/* Mattress */}
+            <mesh position={[0, 0.15, 0]} castShadow receiveShadow>
+              <boxGeometry args={[2.0, 0.3, 1.6]} />
+              <primitive object={materials.fabric} />
+            </mesh>
+          </group>
+        );
+
+      case 'wardrobe':
+        return (
+          <group>
+            {/* Wardrobe body */}
+            <mesh position={[0, 1.0, 0]} castShadow receiveShadow>
+              <boxGeometry args={[1.2, 2.0, 0.6]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Doors */}
+            <mesh position={[-0.3, 1.0, 0.31]} castShadow receiveShadow>
+              <boxGeometry args={[0.58, 1.9, 0.02]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            <mesh position={[0.3, 1.0, 0.31]} castShadow receiveShadow>
+              <boxGeometry args={[0.58, 1.9, 0.02]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Handles */}
+            <mesh position={[-0.1, 1.0, 0.32]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.01, 0.01, 0.1]} />
+              <primitive object={materials.metal} />
+            </mesh>
+            <mesh position={[0.1, 1.0, 0.32]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.01, 0.01, 0.1]} />
+              <primitive object={materials.metal} />
+            </mesh>
+          </group>
+        );
+
+      case 'dresser':
+        return (
+          <group>
+            {/* Dresser body */}
+            <mesh position={[0, 0.4, 0]} castShadow receiveShadow>
+              <boxGeometry args={[1.4, 0.8, 0.5]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Drawers */}
+            <mesh position={[0, 0.6, 0.26]} castShadow receiveShadow>
+              <boxGeometry args={[1.3, 0.15, 0.02]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            <mesh position={[0, 0.4, 0.26]} castShadow receiveShadow>
+              <boxGeometry args={[1.3, 0.15, 0.02]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            <mesh position={[0, 0.2, 0.26]} castShadow receiveShadow>
+              <boxGeometry args={[1.3, 0.15, 0.02]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Handles */}
+            {[0.6, 0.4, 0.2].map((y, i) => (
+              <mesh key={i} position={[0, y, 0.27]} castShadow receiveShadow>
+                <cylinderGeometry args={[0.01, 0.01, 0.08]} />
+                <primitive object={materials.metal} />
+              </mesh>
+            ))}
+          </group>
+        );
+
+      case 'nightstand':
+        return (
+          <group>
+            {/* Nightstand body */}
+            <mesh position={[0, 0.3, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.45, 0.6, 0.4]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Drawer */}
+            <mesh position={[0, 0.45, 0.21]} castShadow receiveShadow>
+              <boxGeometry args={[0.4, 0.15, 0.02]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Handle */}
+            <mesh position={[0, 0.45, 0.22]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.008, 0.008, 0.06]} />
+              <primitive object={materials.metal} />
+            </mesh>
+          </group>
+        );
+
       case 'table':
+      case 'dining_table':
+      case 'coffee_table':
+      case 'side_table':
+      case 'console_table':
+      case 'study_desk':
+      case 'office_table':
+      case 'folding_table':
+      case 'dressing_table':
         return (
           <group>
             {/* Table top */}
@@ -187,6 +450,52 @@ const FurnitureLoader = ({
                 <primitive object={materials.wood} />
               </mesh>
             ))}
+          </group>
+        );
+
+      case 'kitchen_cabinet':
+        return (
+          <group>
+            {/* Cabinet body */}
+            <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.8, 0.9, 0.6]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Door */}
+            <mesh position={[0, 0.45, 0.31]} castShadow receiveShadow>
+              <boxGeometry args={[0.75, 0.85, 0.02]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Handle */}
+            <mesh position={[0.2, 0.45, 0.32]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.01, 0.01, 0.08]} />
+              <primitive object={materials.metal} />
+            </mesh>
+          </group>
+        );
+
+      case 'kitchen_island':
+        return (
+          <group>
+            {/* Island base */}
+            <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
+              <boxGeometry args={[1.8, 0.9, 0.9]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Countertop */}
+            <mesh position={[0, 0.92, 0]} castShadow receiveShadow>
+              <boxGeometry args={[1.9, 0.05, 1.0]} />
+              <primitive object={materials.wood} />
+            </mesh>
+            {/* Stools */}
+            <mesh position={[-0.6, 0.65, 0.6]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.15, 0.15, 0.05]} />
+              <primitive object={materials.leather} />
+            </mesh>
+            <mesh position={[0.6, 0.65, 0.6]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.15, 0.15, 0.05]} />
+              <primitive object={materials.leather} />
+            </mesh>
           </group>
         );
 
@@ -212,6 +521,48 @@ const FurnitureLoader = ({
             <mesh position={[0, 1.5, 0.31]} castShadow receiveShadow>
               <boxGeometry args={[0.6, 0.5, 0.02]} />
               <primitive object={materials.plastic} />
+            </mesh>
+          </group>
+        );
+
+      case 'washing_machine':
+        return (
+          <group>
+            {/* Main body */}
+            <mesh position={[0, 0.425, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.6, 0.85, 0.6]} />
+              <primitive object={materials.plastic} />
+            </mesh>
+            {/* Door */}
+            <mesh position={[0.31, 0.6, 0]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.25, 0.25, 0.02]} />
+              <primitive object={materials.metal} />
+            </mesh>
+            {/* Control panel */}
+            <mesh position={[0, 0.8, 0.31]} castShadow receiveShadow>
+              <boxGeometry args={[0.5, 0.1, 0.02]} />
+              <primitive object={materials.plastic} />
+            </mesh>
+          </group>
+        );
+
+      case 'microwave_oven':
+        return (
+          <group>
+            {/* Main body */}
+            <mesh position={[0, 0.15, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.5, 0.3, 0.4]} />
+              <primitive object={materials.plastic} />
+            </mesh>
+            {/* Door */}
+            <mesh position={[0.26, 0.15, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.02, 0.25, 0.35]} />
+              <primitive object={materials.metal} />
+            </mesh>
+            {/* Handle */}
+            <mesh position={[0.27, 0.05, 0]} castShadow receiveShadow>
+              <boxGeometry args={[0.01, 0.15, 0.02]} />
+              <primitive object={materials.metal} />
             </mesh>
           </group>
         );
