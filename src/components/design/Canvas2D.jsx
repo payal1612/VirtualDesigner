@@ -290,24 +290,13 @@ const DesignElement = ({
       onTransformEnd: handleTransformEnd,
     };
 
-    if (['furniture', 'plant', 'light'].includes(element.type)) {
-      return (
-        <Circle
-          {...commonProps}
-          radius={Math.min(element.width, element.height) / 2}
-          x={element.x + element.width / 2}
-          y={element.y + element.height / 2}
-        />
-      );
-    } else {
-      return (
-        <Rect
-          {...commonProps}
-          width={element.width}
-          height={element.height}
-        />
-      );
-    }
+    return (
+      <Rect
+        {...commonProps}
+        width={element.width}
+        height={element.height}
+      />
+    );
   };
 
   return (
