@@ -52,27 +52,28 @@ const SceneCanvas = ({
             enableZoom={true}
             enableRotate={true}
             minDistance={5}
-            maxDistance={50}
+            maxDistance={30}
             maxPolarAngle={Math.PI / 2}
+            target={[0, 4, 0]}
           />
 
           {/* Lighting Setup */}
-          <ambientLight intensity={lightingMode === 'day' ? 0.6 : 0.2} />
+          <ambientLight intensity={lightingMode === 'day' ? 0.4 : 0.1} />
           <directionalLight
-            position={[10, 10, 5]}
-            intensity={lightingMode === 'day' ? 1 : 0.3}
+            position={[15, 15, 10]}
+            intensity={lightingMode === 'day' ? 0.8 : 0.2}
             castShadow
             shadow-mapSize-width={2048}
             shadow-mapSize-height={2048}
             shadow-camera-far={50}
-            shadow-camera-left={-10}
-            shadow-camera-right={10}
-            shadow-camera-top={10}
-            shadow-camera-bottom={-10}
+            shadow-camera-left={-15}
+            shadow-camera-right={15}
+            shadow-camera-top={15}
+            shadow-camera-bottom={-15}
           />
           <directionalLight
-            position={[-5, 5, -5]}
-            intensity={lightingMode === 'day' ? 0.3 : 0.1}
+            position={[-8, 8, -8]}
+            intensity={lightingMode === 'day' ? 0.2 : 0.05}
           />
 
           {/* Environment */}
@@ -82,35 +83,13 @@ const SceneCanvas = ({
           {lightingMode === 'day' && <Sky sunPosition={[100, 20, 100]} />}
           {lightingMode === 'night' && <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />}
 
-          {/* Grid */}
-          {showGrid && (
-            <Grid
-              args={[20, 20]}
-              cellSize={1}
-              cellThickness={0.5}
-              cellColor="#6b7280"
-              sectionSize={5}
-              sectionThickness={1}
-              sectionColor="#374151"
-              fadeDistance={25}
-              fadeStrength={1}
-              followCamera={false}
-              infiniteGrid={true}
-            />
-          )}
-
-          {/* Ground Plane */}
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
-            <planeGeometry args={[50, 50]} />
-            <meshStandardMaterial color="#f3f4f6" />
-          </mesh>
 
           {/* Contact Shadows */}
           {showShadows && (
             <ContactShadows
               position={[0, 0, 0]}
               opacity={0.4}
-              scale={20}
+              scale={15}
               blur={1}
               far={10}
               resolution={256}
@@ -121,12 +100,12 @@ const SceneCanvas = ({
           {/* Night lighting */}
           {lightingMode === 'night' && (
             <>
-              <pointLight position={[0, 5, 0]} intensity={0.5} color="#ffffff" />
+              <pointLight position={[0, 7, 0]} intensity={0.3} color="#ffffff" />
               <spotLight
-                position={[5, 8, 5]}
+                position={[8, 10, 8]}
                 angle={0.3}
                 penumbra={1}
-                intensity={0.5}
+                intensity={0.3}
                 castShadow
               />
             </>

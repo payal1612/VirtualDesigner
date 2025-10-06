@@ -25,7 +25,8 @@ import {
 } from 'lucide-react';
 import SceneCanvas from '../../threeD/SceneCanvas';
 import { Sofa, Chair, Bed, Table, Refrigerator, AirCooler } from '../../threeD/Furniture';
-import { Html } from '@react-three/drei';
+import { Html, useTexture } from '@react-three/drei';
+import * as THREE from 'three';
 
 const Canvas3D = ({ 
   design, 
@@ -42,6 +43,7 @@ const Canvas3D = ({
   const [environmentPreset, setEnvironmentPreset] = useState('city');
   const [renderQuality, setRenderQuality] = useState('medium');
   const [showSettings, setShowSettings] = useState(false);
+  const [roomDimensions, setRoomDimensions] = useState({ width: 12, height: 8, depth: 10 });
   const controlsRef = useRef();
 
   // Reset camera view
@@ -120,11 +122,11 @@ const Canvas3D = ({
         showShadows={showShadows}
         environmentPreset={environmentPreset}
       >
+        {/* 3D Room Structure */}
+        <Room3D dimensions={roomDimensions} />
+        
         {/* Render 3D Furniture */}
         {design?.elements?.map((element) => render3DFurniture(element))}
-        
-        {/* Room Boundaries */}
-        <RoomBoundaries design={design} />
       </SceneCanvas>
 
       {/* 3D Controls */}
@@ -153,6 +155,226 @@ const Canvas3D = ({
   );
 };
 
+// 3D Room Component with Realistic Walls, Floor, and Ceiling
+const Room3D = ({ dimensions }) => {
+  const { width, height, depth } = dimensions;
+  
+  // Create realistic materials
+  const createWallMaterial = () => {
+    return new THREE.MeshStandardMaterial({
+      color: '#f5f5f5',
+      roughness: 0.8,
+      metalness: 0.1,
+    });
+  };
+  
+  const createFloorMaterial = () => {
+    return new THREE.MeshStandardMaterial({
+      color: '#d4a574',
+      roughness: 0.9,
+      metalness: 0.0,
+    });
+  };
+  
+  const createCeilingMaterial = () => {
+    return new THREE.MeshStandardMaterial({
+      color: '#ffffff',
+      roughness: 0.7,
+      metalness: 0.0,
+    });
+  };
+  
+  const createWindowMaterial = () => {
+    return new THREE.MeshPhysicalMaterial({
+      color: '#87ceeb',
+      transparent: true,
+      opacity: 0.3,
+      roughness: 0.1,
+      metalness: 0.0,
+      transmission: 0.9,
+    });
+  };
+  
+  const createDoorMaterial = () => {
+    return new THREE.MeshStandardMaterial({
+      color: '#8b4513',
+      roughness: 0.6,
+      metalness: 0.1,
+    });
+  };
+
+  return (
+    <group>
+      {/* Floor */}
+      <mesh position={[0, 0, 0]} receiveShadow>
+        <boxGeometry args={[width, 0.1, depth]} />
+        <primitive object={createFloorMaterial()} />
+      </mesh>
+      
+      {/* Floor Pattern (Wood Planks) */}
+      {Array.from({ length: Math.floor(width) }, (_, i) => (
+        <mesh key={`plank-${i}`} position={[i - width/2 + 0.5, 0.05, 0]} receiveShadow>
+          <boxGeometry args={[0.9, 0.02, depth]} />
+          <meshStandardMaterial color={i % 2 === 0 ? '#d4a574' : '#c49464'} roughness={0.9} />
+        </mesh>
+      ))}
+      
+      {/* Ceiling */}
+      <mesh position={[0, height, 0]} receiveShadow>
+        <boxGeometry args={[width, 0.1, depth]} />
+        <primitive object={createCeilingMaterial()} />
+      </mesh>
+      
+      {/* Back Wall */}
+      <mesh position={[0, height/2, -depth/2]} castShadow receiveShadow>
+        <boxGeometry args={[width, height, 0.2]} />
+        <primitive object={createWallMaterial()} />
+      </mesh>
+      
+      {/* Front Wall (with door opening) */}
+      <group>
+        {/* Left part of front wall */}
+        <mesh position={[-width/4, height/2, depth/2]} castShadow receiveShadow>
+          <boxGeometry args={[width/2, height, 0.2]} />
+          <primitive object={createWallMaterial()} />
+        </mesh>
+        
+        {/* Right part of front wall */}
+        <mesh position={[width/4, height/2, depth/2]} castShadow receiveShadow>
+          <boxGeometry args={[width/2, height, 0.2]} />
+          <primitive object={createWallMaterial()} />
+        </mesh>
+        
+        {/* Door frame */}
+        <mesh position={[0, height * 0.75, depth/2 + 0.05]} castShadow>
+          <boxGeometry args={[2.2, height/2, 0.1]} />
+          <primitive object={createDoorMaterial()} />
+        </mesh>
+        
+        {/* Door */}
+        <mesh position={[-0.5, height/4, depth/2 + 0.1]} castShadow>
+          <boxGeometry args={[1.8, height/2, 0.05]} />
+          <primitive object={createDoorMaterial()} />
+        </mesh>
+        
+        {/* Door handle */}
+        <mesh position={[-1.2, height/4, depth/2 + 0.15]} castShadow>
+          <sphereGeometry args={[0.05, 8, 8]} />
+          <meshStandardMaterial color="#ffd700" metalness={0.8} roughness={0.2} />
+        </mesh>
+      </group>
+      
+      {/* Left Wall (with windows) */}
+      <group>
+        {/* Main left wall */}
+        <mesh position={[-width/2, height/2, 0]} castShadow receiveShadow>
+          <boxGeometry args={[0.2, height, depth]} />
+          <primitive object={createWallMaterial()} />
+        </mesh>
+        
+        {/* Windows on left wall */}
+        {Array.from({ length: 3 }, (_, i) => (
+          <group key={`window-left-${i}`}>
+            {/* Window frame */}
+            <mesh position={[-width/2 - 0.05, height * 0.6, (i - 1) * 2]} castShadow>
+              <boxGeometry args={[0.1, 1.5, 1.8]} />
+              <meshStandardMaterial color="#ffffff" />
+            </mesh>
+            
+            {/* Window glass */}
+            <mesh position={[-width/2 - 0.1, height * 0.6, (i - 1) * 2]} receiveShadow>
+              <boxGeometry args={[0.02, 1.3, 1.6]} />
+              <primitive object={createWindowMaterial()} />
+            </mesh>
+          </group>
+        ))}
+      </group>
+      
+      {/* Right Wall */}
+      <mesh position={[width/2, height/2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[0.2, height, depth]} />
+        <primitive object={createWallMaterial()} />
+      </mesh>
+      
+      {/* Baseboards */}
+      <group>
+        {/* Back wall baseboard */}
+        <mesh position={[0, 0.1, -depth/2 + 0.1]} castShadow>
+          <boxGeometry args={[width, 0.2, 0.1]} />
+          <meshStandardMaterial color="#ffffff" />
+        </mesh>
+        
+        {/* Left wall baseboard */}
+        <mesh position={[-width/2 + 0.1, 0.1, 0]} castShadow>
+          <boxGeometry args={[0.1, 0.2, depth]} />
+          <meshStandardMaterial color="#ffffff" />
+        </mesh>
+        
+        {/* Right wall baseboard */}
+        <mesh position={[width/2 - 0.1, 0.1, 0]} castShadow>
+          <boxGeometry args={[0.1, 0.2, depth]} />
+          <meshStandardMaterial color="#ffffff" />
+        </mesh>
+        
+        {/* Front wall baseboards */}
+        <mesh position={[-width/4, 0.1, depth/2 - 0.1]} castShadow>
+          <boxGeometry args={[width/2, 0.2, 0.1]} />
+          <meshStandardMaterial color="#ffffff" />
+        </mesh>
+        <mesh position={[width/4, 0.1, depth/2 - 0.1]} castShadow>
+          <boxGeometry args={[width/2, 0.2, 0.1]} />
+          <meshStandardMaterial color="#ffffff" />
+        </mesh>
+      </group>
+      
+      {/* Crown Molding */}
+      <group>
+        {/* Back wall crown molding */}
+        <mesh position={[0, height - 0.1, -depth/2 + 0.1]} castShadow>
+          <boxGeometry args={[width, 0.2, 0.1]} />
+          <meshStandardMaterial color="#ffffff" />
+        </mesh>
+        
+        {/* Left wall crown molding */}
+        <mesh position={[-width/2 + 0.1, height - 0.1, 0]} castShadow>
+          <boxGeometry args={[0.1, 0.2, depth]} />
+          <meshStandardMaterial color="#ffffff" />
+        </mesh>
+        
+        {/* Right wall crown molding */}
+        <mesh position={[width/2 - 0.1, height - 0.1, 0]} castShadow>
+          <boxGeometry args={[0.1, 0.2, depth]} />
+          <meshStandardMaterial color="#ffffff" />
+        </mesh>
+      </group>
+      
+      {/* Room Lighting */}
+      <pointLight
+        position={[0, height - 1, 0]}
+        intensity={1}
+        distance={20}
+        decay={2}
+        color="#ffffff"
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+      />
+      
+      {/* Window Lighting */}
+      {Array.from({ length: 3 }, (_, i) => (
+        <rectAreaLight
+          key={`window-light-${i}`}
+          position={[-width/2 - 0.2, height * 0.6, (i - 1) * 2]}
+          rotation={[0, Math.PI/2, 0]}
+          width={1.6}
+          height={1.3}
+          intensity={2}
+          color="#87ceeb"
+        />
+      ))}
+    </group>
+  );
+};
 // 3D Element Component
 const Element3D = ({ element, isSelected, onSelect, onUpdate, position, rotation, scale, color }) => {
   const meshRef = useRef();
@@ -245,40 +467,6 @@ const Element3D = ({ element, isSelected, onSelect, onUpdate, position, rotation
           castShadow
         />
       )}
-    </group>
-  );
-};
-
-// Room Boundaries Component
-const RoomBoundaries = ({ design }) => {
-  if (!design?.elements) return null;
-
-  const walls = design.elements.filter(el => el.type === 'wall');
-  
-  return (
-    <group>
-      {walls.map((wall) => {
-        const wall3D = {
-          x: (wall.x - 400) / 50,
-          y: 1.5,
-          z: -(wall.y - 300) / 50,
-          width: wall.width / 50,
-          height: 3,
-          depth: 0.2
-        };
-
-        return (
-          <mesh
-            key={wall.id}
-            position={[wall3D.x, wall3D.y, wall3D.z]}
-            castShadow
-            receiveShadow
-          >
-            <boxGeometry args={[wall3D.width, wall3D.height, wall3D.depth]} />
-            <meshStandardMaterial color={wall.color} />
-          </mesh>
-        );
-      })}
     </group>
   );
 };
