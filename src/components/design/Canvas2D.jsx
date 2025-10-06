@@ -1,21 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Stage, Layer, Rect, Circle, Group, Text, Line } from 'react-konva';
 import { motion } from 'framer-motion';
-import { 
-  Grid3X3, 
-  Move, 
-  RotateCw, 
-  Copy, 
-  Trash2, 
-  Lock, 
-  Unlock,
-  Eye,
-  EyeOff,
-  ZoomIn,
-  ZoomOut,
-  Maximize2,
-  Layers
-} from 'lucide-react';
+import { Grid3x3 as Grid3X3, Move, RotateCw, Copy, Trash2, Lock, Unlock, Eye, EyeOff, ZoomIn, ZoomOut, Maximize2, Layers } from 'lucide-react';
 
 const Canvas2D = ({ 
   design, 
